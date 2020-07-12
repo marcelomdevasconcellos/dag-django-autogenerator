@@ -1,0 +1,14 @@
+wheel==0.34.2
+Django==2.2.9
+django-currentuser==0.4.2
+django-constance==2.4.0
+django-environ==0.4.5
+django-localflavor==2.2
+django-localflavor-br==1.0
+django-timezone-field==3.0
+django-wkhtmltopdf==3.2.0
+djangorestframework==3.10.2
+goslate==1.5.1
+psycopg2==2.8.3
+psycopg2-binary==2.8.3
+django-reversion==3.0.4
