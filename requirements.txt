@@ -1,5 +1,5 @@
 wheel==0.34.2
-Django==2.2.9
+Django==2.2.13
 django-currentuser==0.4.2
 django-constance==2.4.0
 django-environ==0.4.5
