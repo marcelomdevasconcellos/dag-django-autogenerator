@@ -43,8 +43,7 @@ class Models(BaseModel):
     verbose_name = models.CharField(max_length=50)
     verbose_name_plural = models.CharField(max_length=50)
 
-    django_modeladmin = models.BooleanField(default=False)
-    django_tabularinline = models.BooleanField(default=False)
+    django_modeladmin = models.BooleanField(default=True)
 
     rendered_model = models.TextField(blank=True, null=True)
     rendered_form = models.TextField(blank=True, null=True)

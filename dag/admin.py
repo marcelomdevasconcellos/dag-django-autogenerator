@@ -95,7 +95,6 @@ class ModelsAdmin(AuditoriaAdmin):
     list_filter = (
         'inline_models',
         'django_modeladmin',
-        'django_tabularinline',
     )
     list_display = (
         'app',
