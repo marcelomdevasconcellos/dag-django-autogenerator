@@ -1,5 +1,5 @@
 # dag-django-autogenerate
-DAG - Django AutoGenerate - IN DEVELOPMENT
+DAG - Django AutoGenerate
 
 
 ### IN DEVELOPMENT ###
