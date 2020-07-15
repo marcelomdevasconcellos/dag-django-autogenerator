@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import Select, Textarea
 
 from dag.models import *
-from dag_django_autogenerate.mixins import AuditoriaAdmin, AuditoriaAdminInline
+from config.mixins import AuditoriaAdmin, AuditoriaAdminInline
 
 
 

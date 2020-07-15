@@ -6,7 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.fields import CurrentUserDefault
 from django.apps import apps
 from django.utils.translation import gettext_lazy as _
-from dag_django_autogenerate.mixins import BaseModel
+from config.mixins import BaseModel
 
 
 get_model = apps.get_model
