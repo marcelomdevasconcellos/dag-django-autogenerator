@@ -162,7 +162,7 @@ class AppsAdmin(AuditoriaAdmin):
     )
     list_display = (
         'title',
-        'slug'
+        'slug',
         'is_check',
     )
     inlines = [
