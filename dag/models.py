@@ -7,6 +7,9 @@ from rest_framework.fields import CurrentUserDefault
 from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 from config.mixins import BaseModel
+from .choices import *
+from django.db import models
+import jsonfield
 
 
 get_model = apps.get_model
@@ -16,6 +19,8 @@ class Apps(BaseModel):
 
     title = models.CharField(max_length=5000)
     slug = models.CharField(max_length=5000)
+    verbose_name = models.CharField(max_length=50)
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -39,15 +44,17 @@ class Models(BaseModel):
         blank=True,
     )
 
-    title = models.CharField(max_length=50)
-    verbose_name = models.CharField(max_length=50)
-    verbose_name_plural = models.CharField(max_length=50)
+    title = models.CharField(max_length=200, unique=True)
+    verbose_name = models.CharField(max_length=200)
+    verbose_name_plural = models.CharField(max_length=200)
 
     django_modeladmin = models.BooleanField(default=True)
 
     rendered_model = models.TextField(blank=True, null=True)
     rendered_form = models.TextField(blank=True, null=True)
     rendered_admin = models.TextField(blank=True, null=True)
+    is_empty = models.BooleanField(default=True)
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return '{} - {}'.format(self.app, self.title)
@@ -56,6 +63,7 @@ class Models(BaseModel):
         verbose_name = _('Model')
         verbose_name_plural = _('Models')
         ordering = ['app', 'title']
+        unique_together = ['app', 'title']
 
 
 class Fields(BaseModel):
@@ -65,11 +73,6 @@ class Fields(BaseModel):
         on_delete=models.DO_NOTHING,
         related_name='%(class)s_models',
     )
-    field_type = models.ForeignKey(
-        'FieldTypes',
-        on_delete=models.DO_NOTHING,
-        related_name='%(class)s_field_types',
-    )
     foreignkey = models.ForeignKey(
         'Models',
         on_delete=models.DO_NOTHING,
@@ -77,17 +80,13 @@ class Fields(BaseModel):
         blank=True,
         null=True,
     )
-    choice = models.ForeignKey(
-        'Choices',
-        on_delete=models.DO_NOTHING,
-        related_name='%(class)s_choices',
-        blank=True,
-        null=True,
-    )
-
     title = models.CharField(max_length=50, )
-    slug = models.CharField(max_length=50, )
-    help_text = models.CharField(max_length=200, )
+    help_text = models.TextField(null=True, blank=True)
+    verbose_name = models.CharField(max_length=200, null=True, blank=True)
+    field_type = models.CharField(max_length=20, choices=FIELDTYPES)
+    choices = models.TextField(
+        'Choices (separated by "|" and breaklines)',
+        null=True, blank=True)
 
     max_length = models.IntegerField(blank=True, null=True)
     default_value = models.CharField(max_length=50, blank=True, null=True)
@@ -101,9 +100,9 @@ class Fields(BaseModel):
 
     is_ordering = models.BooleanField(default=False)
     order = models.IntegerField()
+    is_check = models.BooleanField(default=False)
 
     is_model_title = models.BooleanField(default=False)
-
     in_search_fields = models.BooleanField(default=False)
     in_list_filter = models.BooleanField(default=False)
     in_list_display = models.BooleanField(default=False)
@@ -123,12 +122,14 @@ class Fields(BaseModel):
         verbose_name = _('Field')
         verbose_name_plural = _('Fields')
         ordering = ['model', 'order']
+        unique_together = ['model', 'title']
 
 
 class FieldTypes(BaseModel):
 
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     model_code = models.TextField(blank=True, null=True)
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -150,6 +151,7 @@ class CustomModels(BaseModel):
     model_code = models.TextField(blank=True, null=True)
     admin_code = models.TextField(blank=True, null=True)
     form_code = models.TextField(blank=True, null=True)
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -169,6 +171,7 @@ class ModelFunctions(BaseModel):
     title = models.CharField(max_length=500)
     slug = models.CharField(max_length=500)
     code = models.TextField()
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -179,40 +182,11 @@ class ModelFunctions(BaseModel):
         ordering = ['model', 'title']
 
 
-class Choices(BaseModel):
-    title = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _('Choice')
-        verbose_name_plural = _('Choices')
-        ordering = ['title']
-
-
-class ChoicesValues(BaseModel):
-    choice = models.ForeignKey(
-        'Choices',
-        on_delete=models.DO_NOTHING,
-        related_name='%(class)s_choices'
-    )
-    key = models.CharField(max_length=5000)
-    value = models.CharField(max_length=5000)
-
-    def __str__(self):
-        return '{} - {}'.format(self.choice, self.key)
-
-    class Meta:
-        verbose_name = _('Choice Value')
-        verbose_name_plural = _('Choice Values')
-        ordering = ['choice', 'key']
-
-
 class Variables(BaseModel):
     title = models.CharField(max_length=200)
     key = models.TextField(blank=True, null=True)
     code = models.TextField(blank=True, null=True)
+    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
