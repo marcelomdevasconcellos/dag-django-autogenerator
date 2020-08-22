@@ -20,7 +20,12 @@ class Apps(BaseModel):
     title = models.CharField(max_length=5000)
     slug = models.CharField(max_length=5000)
     verbose_name = models.CharField(max_length=50)
-    is_check = models.BooleanField(default=False)
+    is_verify = models.BooleanField(default=False)
+
+    def title_unicode(self):
+        import unidecode
+        title = self.title.replace(' ', '')
+        return unidecode.unidecode(title)
 
     def __str__(self):
         return self.title
@@ -35,7 +40,7 @@ class Models(BaseModel):
 
     app = models.ForeignKey(
         'Apps',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         related_name='%(class)s_models'
     )
     inline_models = models.ManyToManyField(
@@ -54,7 +59,11 @@ class Models(BaseModel):
     rendered_form = models.TextField(blank=True, null=True)
     rendered_admin = models.TextField(blank=True, null=True)
     is_empty = models.BooleanField(default=True)
-    is_check = models.BooleanField(default=False)
+
+    def title_unicode(self):
+        import unidecode
+        title = self.title.replace(' ', '').replace('-', '_')
+        return unidecode.unidecode(title)
 
     def __str__(self):
         return '{} - {}'.format(self.app, self.title)
@@ -70,20 +79,28 @@ class Fields(BaseModel):
 
     model = models.ForeignKey(
         'Models',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         related_name='%(class)s_models',
     )
     foreignkey = models.ForeignKey(
         'Models',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         related_name='%(class)s_foreignkey',
         blank=True,
         null=True,
     )
-    title = models.CharField(max_length=50, )
+    type = models.ForeignKey(
+        'FieldTypes',
+        on_delete=models.SET_NULL,
+        related_name='%(class)s_fieldtype',
+        blank=True,
+        null=True,
+    )
+    slug = models.CharField(max_length=50, )
     help_text = models.TextField(null=True, blank=True)
-    verbose_name = models.CharField(max_length=200, null=True, blank=True)
-    field_type = models.CharField(max_length=20, choices=FIELDTYPES)
+    verbose_name = models.CharField(max_length=500, null=True, blank=True)
+    field_type_txt = models.CharField(max_length=50, null=True, blank=True)
+    foreignkey_txt = models.CharField(max_length=50, null=True, blank=True)
     choices = models.TextField(
         'Choices (separated by "|" and breaklines)',
         null=True, blank=True)
@@ -100,7 +117,6 @@ class Fields(BaseModel):
 
     is_ordering = models.BooleanField(default=False)
     order = models.IntegerField()
-    is_check = models.BooleanField(default=False)
 
     is_model_title = models.BooleanField(default=False)
     in_search_fields = models.BooleanField(default=False)
@@ -115,28 +131,32 @@ class Fields(BaseModel):
     rendered_filter_html = models.TextField(blank=True, null=True)
     rendered_filter_dict = models.TextField(blank=True, null=True)
 
+    def slug_unicode(self):
+        import unidecode
+        slug = self.slug.replace(' ', '').replace('-', '_')
+        return unidecode.unidecode(slug)
+
     def __str__(self):
-        return '{} - {}'.format(self.model, self.title)
+        return '{} - {}'.format(self.model, self.slug)
 
     class Meta:
         verbose_name = _('Field')
         verbose_name_plural = _('Fields')
         ordering = ['model', 'order']
-        unique_together = ['model', 'title']
+        unique_together = ['model', 'slug']
 
 
 class FieldTypes(BaseModel):
 
     title = models.CharField(max_length=100, unique=True)
     model_code = models.TextField(blank=True, null=True)
-    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
     class Meta:
         verbose_name = _('Field Type')
-        verbose_name_plural = _('Field Type')
+        verbose_name_plural = _('Field Types')
         ordering = ['title']
 
 
@@ -151,7 +171,6 @@ class CustomModels(BaseModel):
     model_code = models.TextField(blank=True, null=True)
     admin_code = models.TextField(blank=True, null=True)
     form_code = models.TextField(blank=True, null=True)
-    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -171,7 +190,6 @@ class ModelFunctions(BaseModel):
     title = models.CharField(max_length=500)
     slug = models.CharField(max_length=500)
     code = models.TextField()
-    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -186,7 +204,6 @@ class Variables(BaseModel):
     title = models.CharField(max_length=200)
     key = models.TextField(blank=True, null=True)
     code = models.TextField(blank=True, null=True)
-    is_check = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

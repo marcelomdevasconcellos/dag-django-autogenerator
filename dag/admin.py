@@ -3,6 +3,41 @@ from django.forms import Select, Textarea
 
 from dag.models import *
 from config.mixins import AuditoriaAdmin, AuditoriaAdminInline
+from .functions import render_fields_obj, render_models_admins_obj
+
+
+def render_fields(modeladmin, request, queryset):
+    for obj in queryset:
+        render_fields_obj(obj)
+
+
+render_fields.short_description = "Render fields"
+
+
+def update_foreignkey(modeladmin, request, queryset):
+    from django.db.models import Q
+    for obj in queryset:
+        foreignkey = Models.objects.\
+            filter(
+                Q(verbose_name_plural=obj.foreignkey_txt) |
+                Q(title=obj.foreignkey_txt)).all()
+        if foreignkey:
+            Fields.objects.filter(id=obj.id).\
+                update(foreignkey=foreignkey[0])
+
+
+update_foreignkey.short_description = "Update foreignkeys"
+
+
+def update_field_types(modeladmin, request, queryset):
+    for obj in queryset:
+        type = FieldTypes.objects.filter(title=obj.field_type_txt).all()
+        if type:
+            Fields.objects.filter(id=obj.id).\
+                update(type=type[0])
+
+
+update_field_types.short_description = "Update field types"
 
 
 def verify_empty_tables(modeladmin, request, queryset):
@@ -29,7 +64,7 @@ class FieldsInline(AuditoriaAdminInline):
         'title',
         'slug',
         'help_text',
-        'field_type',
+        'field_type_txt',
         'foreignkey',
         'max_length',
         'default_value',
@@ -61,7 +96,6 @@ class FieldsInline(AuditoriaAdminInline):
     )
 
 
-
 class ModelsInline(AuditoriaAdminInline):
     model = Models
     extra = 4
@@ -76,15 +110,22 @@ class ModelsInline(AuditoriaAdminInline):
 
 @admin.register(Fields)
 class FieldsAdmin(AuditoriaAdmin):
+    actions = [
+        render_fields,
+        update_field_types,
+        update_foreignkey,
+    ]
     search_fields = (
-        'title',
+        'slug',
         'verbose_name',
         'help_text',
     )
     list_filter = (
-        'model',
-        'field_type',
+        'field_type_txt',
+        'type',
+        'foreignkey_txt',
         'foreignkey',
+        'model',
         'is_null',
         'is_blank',
         'is_unique',
@@ -97,15 +138,13 @@ class FieldsAdmin(AuditoriaAdmin):
         'in_list_filter',
         'in_list_display',
         'in_field_model',
-        'is_check',
     )
     list_display = (
         'model',
-        'title',
+        'slug',
         'verbose_name',
-        'field_type',
+        'type',
         'foreignkey',
-        'help_text',
         'max_length',
         'default_value',
         'is_null',
@@ -121,14 +160,34 @@ class FieldsAdmin(AuditoriaAdmin):
         'in_list_filter',
         'in_list_display',
         'in_field_model',
-        'is_check',
     )
+    readonly_fields = (
+        'rendered_model_django',
+        'rendered_form_django',
+        'rendered_table_html',
+        'rendered_form_html',
+        'rendered_filter_html',
+        'rendered_filter_dict',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+    )
+
+
+def render_models_admins(modeladmin, request, queryset):
+    for obj in queryset:
+        render_models_admins_obj(obj)
+
+
+render_models_admins.short_description = "Render models and admins"
 
 
 @admin.register(Models)
 class ModelsAdmin(AuditoriaAdmin):
     actions = [
         verify_empty_tables,
+        render_models_admins,
     ]
     search_fields = (
         'title',
@@ -138,7 +197,7 @@ class ModelsAdmin(AuditoriaAdmin):
     list_filter = (
         'django_modeladmin',
         'is_empty',
-        'is_check',
+        'app',
     )
     list_display = (
         'app',
@@ -147,23 +206,35 @@ class ModelsAdmin(AuditoriaAdmin):
         'verbose_name_plural',
         'django_modeladmin',
         'is_empty',
-        'is_check',
     )
     inlines = [
         FieldsInline,
     ]
+    readonly_fields = (
+        'rendered_model',
+        'rendered_form',
+        'rendered_admin',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+    )
 
 
 @admin.register(Apps)
 class AppsAdmin(AuditoriaAdmin):
-    search_fields = ('title', 'slug')
+    actions = ()
+    search_fields = (
+        'title',
+        'slug',
+    )
     list_filter = (
-        'is_check',
+        'is_verify',
     )
     list_display = (
         'title',
         'slug',
-        'is_check',
+        'is_verify',
     )
     inlines = [
         ModelsInline,
@@ -175,13 +246,11 @@ class FieldTypesAdmin(AuditoriaAdmin):
     search_fields = (
         'title',
         'model_code',
-        'is_check',
     )
     list_filter = ()
     list_display = (
         'title',
         'model_code',
-        'is_check',
     )
 
 
@@ -193,13 +262,11 @@ class CustomModelsAdmin(AuditoriaAdmin):
     )
     list_filter = (
         'app',
-        'is_check',
     )
     list_display = (
         'app',
         'title',
         'slug',
-        'is_check',
     )
 
 
@@ -211,13 +278,11 @@ class ModelFunctionsAdmin(AuditoriaAdmin):
     )
     list_filter = (
         'model',
-        'is_check',
     )
     list_display = (
         'model',
         'title',
         'slug',
-        'is_check',
     )
 
 
@@ -228,12 +293,9 @@ class VariablesAdmin(AuditoriaAdmin):
         'key',
         'code',
     )
-    list_filter = (
-        'is_check',
-    )
+    list_filter = ()
     list_display = (
         'title',
         'key',
         'code',
-        'is_check',
     )

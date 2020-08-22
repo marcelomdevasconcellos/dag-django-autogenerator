@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+from .installed_apps import INSTALLED_APPS as INSTALLED_APPS_LOCAL
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reversion',
     'dag.apps.DagConfig',
-]
+] + INSTALLED_APPS_LOCAL
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
