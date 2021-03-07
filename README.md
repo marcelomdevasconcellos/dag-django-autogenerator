@@ -6,7 +6,7 @@ Este repositório visa ajudar os desenvolvedores a criar um projeto completo uti
 
 ### Como instalar para desenvolvimento? ###
 
-1. Clone o repositório: ```git clone https://github.com/marcelomdevasconcellos/dag-django-autogenerate.git ```
+1. Clone o repositório: ```git clone https://github.com/marcelomdevasconcellos/dag-django-autogenerator.git ```
 
 2. Crie o virtualenv: ```python3 -m venv venv_dag ```
 
@@ -15,7 +15,7 @@ Este repositório visa ajudar os desenvolvedores a criar um projeto completo uti
 - No windows: ```venv_dag\Scripts\activate```
 - No Linux ou Mac: ```source venv_dag/bin/activate```
 
-4. Acesse o diretório do projeto: ```cd dag-django-autogenerate```
+4. Acesse o diretório do projeto: ```cd dag-django-autogenerator```
 
 3. Instale os requirements: ```pip install -r requirements.txt ```
 
