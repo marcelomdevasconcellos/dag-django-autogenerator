@@ -92,7 +92,6 @@ SELECT DISTINCT
 
 ### Backlog ###
 
-- Escrita de larguras do bootstrap nos formulários;
 - Geração de forms;
 - Inclusão de regras de negócio;
 - Inclusão do tipo de inline na planilha e geração (TabularInline/StackedInline);
