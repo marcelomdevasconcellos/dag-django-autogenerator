@@ -16,11 +16,11 @@ DAG - Django AutoGenerate
 
 3. Instale os requirements: ```pip install -r requirements.txt ```
 
-4. Copie o arquivo .env_example para .env:
+4. Copie o arquivo `config/.env_example` para `config/.env`:
 
 - No Linux ou Mac: ```cp config/.env_example config/.env ```
 
-5. Crie o banco de dados em postgres com os dados abaixo ou altere os dados do banco de dados contidos no arquivo `config/.env:
+5. Crie o banco de dados em postgres com os dados abaixo ou altere os dados do banco de dados contidos no arquivo `config/.env`:
 
 ```
 HOST: localhost

@@ -134,3 +134,4 @@ dmypy.json
 config/installed_apps.py
 teste/
 .~lock*
+plan.ods
