@@ -1,29 +1,47 @@
 from django.contrib import admin
 from django.forms import Select, Textarea
 
-from dag.models import *
+from dag.models import Models, Apps, FieldTypes, Fields, ModelFunctions, CustomModels, Variables
 from config.mixins import AuditoriaAdmin, AuditoriaAdminInline
-from .functions import render_fields_obj, render_models_admins_obj
 
 
 def render_fields(modeladmin, request, queryset):
+    from django.template import Template, Context
     for obj in queryset:
-        render_fields_obj(obj)
+        context = {
+            'f': obj,
+        }
+        template = '{% load templatetags %}{% autoescape off %}' + obj.type.model_code + '{% endautoescape %}'
+        t = Template(template)
+        context = Context(context)
+        rendered_model_django = t.render(context)
+        Fields.objects.\
+            filter(id=obj.id).\
+            update(rendered_model_django=rendered_model_django)
+
+    # def create_models(request, model_id):
+    #
+    #     from django.template import Template, Context
+    #     context = {
+    #         'f': obj,
+    #     }
+    #     template = '{% load templatetags %}{% autoescape off %}' + m.grupos.admin_code + '{% endautoescape %}'
+    #     t = Template(template)
+    #     context = Context(context)
+    #     rendered_model = t.render(context)
+    #     rendered_admin = rendered_admin.replace('<@', '{%').replace('@>', '%}')
+    #     rendered_admin = rendered_admin.replace('<<', '{{').replace('>>', '}}')
+    #     EmensageriaModelos.objects.filter(id=m.id).update(rendered_admin=rendered_admin)
 
 
 render_fields.short_description = "Render fields"
 
 
 def update_foreignkey(modeladmin, request, queryset):
-    from django.db.models import Q
     for obj in queryset:
-        foreignkey = Models.objects.\
-            filter(
-                Q(verbose_name_plural=obj.foreignkey_txt) |
-                Q(title=obj.foreignkey_txt)).all()
+        foreignkey = Models.objects.filter(title=obj.foreignkey_txt).all()
         if foreignkey:
-            Fields.objects.filter(id=obj.id).\
-                update(foreignkey=foreignkey[0])
+            Fields.objects.filter(id=obj.id).update(foreignkey=foreignkey[0])
 
 
 update_foreignkey.short_description = "Update foreignkeys"
@@ -33,8 +51,7 @@ def update_field_types(modeladmin, request, queryset):
     for obj in queryset:
         type = FieldTypes.objects.filter(title=obj.field_type_txt).all()
         if type:
-            Fields.objects.filter(id=obj.id).\
-                update(type=type[0])
+            Fields.objects.filter(id=obj.id).update(type=type[0])
 
 
 update_field_types.short_description = "Update field types"
@@ -96,6 +113,7 @@ class FieldsInline(AuditoriaAdminInline):
     )
 
 
+
 class ModelsInline(AuditoriaAdminInline):
     model = Models
     extra = 4
@@ -122,7 +140,7 @@ class FieldsAdmin(AuditoriaAdmin):
     )
     list_filter = (
         'field_type_txt',
-        'type',
+        'fieldtype',
         'foreignkey_txt',
         'foreignkey',
         'model',
@@ -143,7 +161,8 @@ class FieldsAdmin(AuditoriaAdmin):
         'model',
         'slug',
         'verbose_name',
-        'type',
+        'field_type_txt',
+        'fieldtype',
         'foreignkey',
         'max_length',
         'default_value',
@@ -162,6 +181,9 @@ class FieldsAdmin(AuditoriaAdmin):
         'in_field_model',
     )
     readonly_fields = (
+        'model_title',
+        'fieldtype_title',
+        'foreignkey_model_title',
         'rendered_model_django',
         'rendered_form_django',
         'rendered_table_html',
@@ -175,19 +197,11 @@ class FieldsAdmin(AuditoriaAdmin):
     )
 
 
-def render_models_admins(modeladmin, request, queryset):
-    for obj in queryset:
-        render_models_admins_obj(obj)
-
-
-render_models_admins.short_description = "Render models and admins"
-
 
 @admin.register(Models)
 class ModelsAdmin(AuditoriaAdmin):
     actions = [
         verify_empty_tables,
-        render_models_admins,
     ]
     search_fields = (
         'title',
@@ -210,32 +224,13 @@ class ModelsAdmin(AuditoriaAdmin):
     inlines = [
         FieldsInline,
     ]
-    readonly_fields = (
-        'rendered_model',
-        'rendered_form',
-        'rendered_admin',
-        'created_at',
-        'created_by',
-        'updated_at',
-        'updated_by',
-    )
 
 
 @admin.register(Apps)
 class AppsAdmin(AuditoriaAdmin):
-    actions = ()
-    search_fields = (
-        'title',
-        'slug',
-    )
-    list_filter = (
-        'is_verify',
-    )
-    list_display = (
-        'title',
-        'slug',
-        'is_verify',
-    )
+    search_fields = ('title', 'slug')
+    list_filter = ()
+    list_display = ('title', 'slug')
     inlines = [
         ModelsInline,
     ]

@@ -11,6 +11,14 @@ INSTALLED_APPS = """INSTALLED_APPS = [{% for a in apps %}
 """
 
 
+CHOICES_CONTENT = """import os
+
+{% for f in fields %}{% if f.choices %}
+{{f.choices_name}} = {{f.choices_value}}
+
+{% endif %}{% endfor %}"""
+
+
 MODEL_CONTENT = """from django.db import models
 from rest_framework.serializers import ModelSerializer
 from rest_framework.fields import CurrentUserDefault
@@ -25,7 +33,9 @@ from django.contrib import admin
 from django.forms import Select, Textarea
 from django.utils.html import format_html
 
-from .models import *{% for m in models %}
+from .models import ({% for m in models %}
+    {{m.title}},{% endfor %}
+){% for m in models %}
 {{m.rendered_admin}}{% endfor %}"""
 
 
@@ -60,3 +70,68 @@ class {{m.title}}Admin(admin.ModelAdmin):
     readonly_fields = ({% for f in fields %}{% if f.is_readonly %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )"""
+
+
+FIELD_CHARFIELD = """{{f.slug_unicode}} = models.CharField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.choices %}
+        choices={{f.choices_name}}, {% endif %}
+        max_length={{f.max_length|valor}}, {% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_TEXTFIELD = """{{f.slug_unicode}} = models.TextField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_DECIMALFIELD = """{{f.slug_unicode}} = models.DecimalField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %} 
+        max_digits=15, 
+        decimal_places=2, {% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_INTEGERFIELD = """{{f.slug_unicode}} = models.IntegerField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.choices %}
+        choices={{f.choices_name}}, {% endif %}{% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_DATEFIELD = """{{f.slug_unicode}} = models.DateField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_FOREIGNKEY = """{{f.slug_unicode}} = models.ForeignKey(
+        '{{f.foreignkey.app.slug}}.{{f.foreignkey.title_unicode}}', 
+        on_delete=models.PROTECT,  
+        related_name='%(class)s_{{f.slug_unicode}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.is_blank %}
+        blank=True, {% endif %}{% if f.is_null %}
+        null=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
+
+
+FIELD_TYPES = {
+    'IntegerField': FIELD_INTEGERFIELD,
+    'CharField': FIELD_CHARFIELD,
+    'DateField': FIELD_DATEFIELD,
+    'DecimalField': FIELD_DECIMALFIELD,
+    'ForeignKey': FIELD_FOREIGNKEY,
+    'TextField': FIELD_TEXTFIELD,
+}

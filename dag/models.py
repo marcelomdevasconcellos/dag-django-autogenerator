@@ -20,7 +20,6 @@ class Apps(BaseModel):
     title = models.CharField(max_length=5000)
     slug = models.CharField(max_length=5000)
     verbose_name = models.CharField(max_length=50)
-    is_verify = models.BooleanField(default=False)
 
     def title_unicode(self):
         import unidecode
@@ -52,13 +51,15 @@ class Models(BaseModel):
     title = models.CharField(max_length=200, unique=True)
     verbose_name = models.CharField(max_length=200)
     verbose_name_plural = models.CharField(max_length=200)
-
+    app_slug = models.CharField(max_length=200)
     django_modeladmin = models.BooleanField(default=True)
+    django_inline_models = models.TextField(blank=True, null=True)
 
     rendered_model = models.TextField(blank=True, null=True)
     rendered_form = models.TextField(blank=True, null=True)
     rendered_admin = models.TextField(blank=True, null=True)
     is_empty = models.BooleanField(default=True)
+    quant = models.IntegerField(default=0)
 
     def title_unicode(self):
         import unidecode
@@ -89,7 +90,7 @@ class Fields(BaseModel):
         blank=True,
         null=True,
     )
-    type = models.ForeignKey(
+    fieldtype = models.ForeignKey(
         'FieldTypes',
         on_delete=models.SET_NULL,
         related_name='%(class)s_fieldtype',
@@ -106,6 +107,7 @@ class Fields(BaseModel):
         null=True, blank=True)
 
     max_length = models.IntegerField(blank=True, null=True)
+    bootstrap_columns = models.IntegerField(default=6)
     default_value = models.CharField(max_length=50, blank=True, null=True)
 
     is_null = models.BooleanField(default=False)
@@ -124,12 +126,33 @@ class Fields(BaseModel):
     in_list_display = models.BooleanField(default=False)
     in_field_model = models.BooleanField(default=False)
 
+    model_title = models.CharField(max_length=200, blank=True, null=True)
+    fieldtype_title = models.CharField(max_length=100, blank=True, null=True)
+    foreignkey_model_title = models.CharField(max_length=200, blank=True, null=True)
+
     rendered_model_django = models.TextField(blank=True, null=True)
     rendered_form_django = models.TextField(blank=True, null=True)
     rendered_table_html = models.TextField(blank=True, null=True)
     rendered_form_html = models.TextField(blank=True, null=True)
     rendered_filter_html = models.TextField(blank=True, null=True)
     rendered_filter_dict = models.TextField(blank=True, null=True)
+
+    def choices_name(self):
+        import unidecode
+        slug = self.slug.replace(' ', '').replace('-', '_').upper()
+        return 'CHOICES_%s' % unidecode.unidecode(slug)
+
+    def choices_value(self):
+        import unidecode
+        if self.fieldtype_title == 'IntegerField':
+            slug = self.choices.replace('|', ",'").replace('\n', "'),\n    (")
+            return "[\n    (%s'), \n]" % unidecode.unidecode(slug)
+        elif self.fieldtype_title == 'CharField':
+            slug = self.choices.replace('|', "', '").replace('\n', "'),\n    ('")
+            return "[\n    ('%s'),\n]" % unidecode.unidecode(slug)
+        else:
+            return "[(None,'erro'),]"
+
 
     def slug_unicode(self):
         import unidecode

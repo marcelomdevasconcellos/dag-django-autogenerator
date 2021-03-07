@@ -1,4 +1,4 @@
-from dag.models import *
+from dag.models import Models, Fields, FieldTypes, Apps, ModelFunctions
 
 
 def save_file(filename, content):
@@ -16,14 +16,20 @@ def read_file(filename):
 
 
 def render_fields_obj(field):
+
+    from dag.variables import FIELD_TYPES
     from django.template import Template, Context
+
     context = {
         'f': field,
     }
-    template = '{% load templatetags %}{% autoescape off %}' + field.type.model_code + '{% endautoescape %}'
+
+    template = '{% load templatetags %}{% autoescape off %}' + \
+        FIELD_TYPES[field.fieldtype_title] + '{% endautoescape %}'
     t = Template(template)
     context = Context(context)
     rendered_model_django = t.render(context)
+
     Fields.objects.\
         filter(id=field.id).\
         update(rendered_model_django=rendered_model_django)
@@ -32,20 +38,22 @@ def render_fields_obj(field):
 def render_models_admins_obj(model):
 
     from django.template import Template, Context
-    from .variables import MODEL_CLASS, ADMIN_CLASS
+    from dag.variables import MODEL_CLASS, ADMIN_CLASS, FIELD_TYPES
 
-    fields = Fields.objects.filter(model=model).order_by('order').all()
+    fields = Fields.objects.filter(model=model).order_by('id').all()
     context = {
         'fields': fields,
         'm': model,
     }
 
-    template_model = '{% load templatetags %}{% autoescape off %}' + MODEL_CLASS + '{% endautoescape %}'
+    template_model = '{% load templatetags %}{% autoescape off %}' + \
+        MODEL_CLASS + '{% endautoescape %}'
     t = Template(template_model)
     context_model = Context(context)
     rendered_model = t.render(context_model)
 
-    template_admin = '{% load templatetags %}{% autoescape off %}' + ADMIN_CLASS + '{% endautoescape %}'
+    template_admin = '{% load templatetags %}{% autoescape off %}' + \
+        ADMIN_CLASS + '{% endautoescape %}'
     t = Template(template_admin)
     context_admin = Context(context)
     rendered_admin = t.render(context_admin)
@@ -56,4 +64,3 @@ def render_models_admins_obj(model):
             rendered_model=rendered_model,
             rendered_admin=rendered_admin,
         )
-
