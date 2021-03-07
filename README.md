@@ -84,9 +84,16 @@ ORDER BY table_schema, table_name, ordinal_position
 ### Backlog ###
 
 - Escrita de larguras do bootstrap nos formulários;
-- Inclusão de regras de negócio;
 - Geração de forms;
-- Inclusão do tipo de Inline na planilha e geração (TabularInline/StackedInline);
+- Inclusão de regras de negócio;
+- Inclusão do tipo de inline na planilha e geração (TabularInline/StackedInline);
+- Inclusão de autocomplete;
+- Inclusão de range date nos filtros de data;
+- Inclusão de geração do django restframework;
+- Inclusão de classe para páginas especiais;
+- Incluir parâmetro do caminho e nome do arquivo em import_ods
+- Transformar em um extensão do python/django;
+
 
 ### Obrigado!
 
