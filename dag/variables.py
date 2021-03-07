@@ -77,7 +77,7 @@ class {{m.title}}Admin(AuditoriaAdmin):
     list_display = ({% for f in fields %}{% if f.in_list_display %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )
-    readonly_fields = ({% for f in fields %}{% if f.is_readonly %}
+    readonly_fields = AuditoriaAdmin.readonly_fields + ({% for f in fields %}{% if f.is_readonly %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )
     inlines = [{% for mi in m.inline_models.all %}
