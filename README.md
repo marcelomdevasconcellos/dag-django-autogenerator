@@ -1,5 +1,8 @@
 # dag-django-autogenerate
-DAG - Django AutoGenerate
+
+### O que é? ###
+
+Este repositório visa ajudar os desenvolvedores a criar um projeto completo utilizando django admin, aonde é possível cadastrar todos os modelos e campos em uma planilha e através da execução de poucos comandos é criado todos os arquivos .py necessários para o projeto, depois é só executar as migrações e o sistema estará pronto para uso!
 
 ### Como instalar para desenvolvimento? ###
 
