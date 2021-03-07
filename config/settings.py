@@ -41,13 +41,17 @@ ALLOWED_HOSTS = [
 
 from .installed_apps import INSTALLED_APPS as INSTALLED_APPS_LOCAL
 INSTALLED_APPS = [
+    'adminlteui',  # https://github.com/wuyue92tree/django-adminlte-ui
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'treebeard',  # https://github.com/wuyue92tree/django-adminlte-ui
+    'ajax_select',  # https://dev.to/thearjun/implement-autocomplete-in-django-3h20
     'reversion',
+    'rangefilter', # https://pypi.org/project/django-admin-rangefilter/
     'dag.apps.DagConfig',
 ] + INSTALLED_APPS_LOCAL
 
