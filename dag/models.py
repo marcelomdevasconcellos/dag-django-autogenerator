@@ -61,6 +61,9 @@ class Models(BaseModel):
     is_empty = models.BooleanField(default=True)
     quant = models.IntegerField(default=0)
 
+    def fields(self):
+        return Fields.objects.filter(model=self.id).all()
+
     def title_unicode(self):
         import unidecode
         title = self.title.replace(' ', '').replace('-', '_')

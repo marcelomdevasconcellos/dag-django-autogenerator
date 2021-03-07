@@ -61,7 +61,11 @@ def import_fields(data_list):
         if len(d):
             dic = {}
             for f in range(len(fields)):
-                if d[f] and d[f] != 'NULL':
+                if d[f] and d[f] == 'TRUE':
+                    dic[fields[f]] = True
+                elif d[f] and d[f] == 'FALSE':
+                    dic[fields[f]] = False
+                elif d[f] and d[f] != 'NULL':
                     dic[fields[f]] = d[f]
 
             try:
@@ -87,6 +91,17 @@ def import_fields(data_list):
             obj = Fields(**dic)
             obj.save()
 
+def update_inline_models():
+    models = Models.objects.filter(django_inline_models__isnull=False).all()
+    for m in models:
+        if m.django_inline_models.strip():
+            inline_models = m.django_inline_models.split(',')
+            for i in inline_models:
+                i = i.strip()
+                print(i)
+                model_inline = Models.objects.get(title=i)
+                m.inline_models.add(model_inline)
+
 
 def import_ods():
     from pyexcel_ods3 import get_data
@@ -101,6 +116,7 @@ def import_ods():
     import_models(data['dag_models'][1:])
     import_fieldtypes(data['dag_fieldtypes'][1:])
     import_fields(data['dag_fields'][1:])
+    update_inline_models()
 
 
 class Command(BaseCommand):

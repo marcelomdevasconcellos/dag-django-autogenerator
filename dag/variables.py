@@ -57,7 +57,15 @@ class {{m.title}}(BaseModel):
 ADMIN_CLASS = """
 
 
-@admin.register({{m.title}})
+{% for mi in m.inline_models.all %}
+class {{mi.title}}InlineAdmin(AuditoriaAdminInline):
+    model = {{mi.title}}
+    list_display = ({% for f in mi.fields %}{% if f.in_list_display %}
+        '{{f.slug}}',{% endif %}{% endfor %}
+    )
+
+
+{% endfor %}@admin.register({{m.title}})
 class {{m.title}}Admin(AuditoriaAdmin):
     actions = []
     search_fields = ({% for f in fields %}{% if f.in_search_fields %}
@@ -71,27 +79,10 @@ class {{m.title}}Admin(AuditoriaAdmin):
     )
     readonly_fields = ({% for f in fields %}{% if f.is_readonly %}
         '{{f.slug}}',{% endif %}{% endfor %}
-    )"""
-
-
-ADMIN_INLINE_CLASS = """
-
-
-class {{m.title}}Admin(AuditoriaAdminInline):
-    model = {{m.title}}
-    list_display = ({% for f in fields %}{% if f.in_list_display %}
-        '{{f.slug}}',{% endif %}{% endfor %}
-    )"""
-
-
-ADMIN_STACKED_INLINE_CLASS = """
-
-
-class {{m.title}}Admin(AuditoriaAdminStackedInline):
-    model = {{m.title}}
-    list_display = ({% for f in fields %}{% if f.in_list_display %}
-        '{{f.slug}}',{% endif %}{% endfor %}
-    )"""
+    )
+    inlines = [{% for mi in m.inline_models.all %}
+        {{mi.title}}InlineAdmin,{% endfor %}
+    ]"""
 
 
 FIELD_CHARFIELD = """{{f.slug_unicode}} = models.CharField(
