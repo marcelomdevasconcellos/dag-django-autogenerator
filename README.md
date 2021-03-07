@@ -2,7 +2,7 @@
 
 ### O que é? ###
 
-Este repositório visa ajudar os desenvolvedores a criar um projeto completo utilizando django admin, aonde é possível cadastrar todos os modelos e campos em uma planilha e através da execução de poucos comandos é criado todos os arquivos .py necessários para o projeto, depois é só executar as migrações e o sistema estará pronto para uso!
+Este repositório visa ajudar os desenvolvedores a criar um projeto completo utilizando django admin, aonde é possível cadastrar todos os modelos e campos em uma planilha e através da execução de poucos comandos são criados todos os arquivos .py necessários para o projeto, depois é só executar as migrações (makemigrations e migrate) e o sistema estará pronto para uso!
 
 ### Como instalar para desenvolvimento? ###
 
@@ -53,32 +53,41 @@ PORT: 5432
 6. Acesse a url ```http://localhost:8000/admin/```
 
 
-### Dica de consulta que ajudará a extrair informações de um banco de dados Postgres existente ###
+### Dica: Consulta SQL que ajudará a extrair informações de um banco de dados Postgres existente ###
 ```
-WITH dag AS (WITH foreignkeys AS (
-    SELECT tc.table_schema,
-           tc.constraint_name,
-           tc.table_name,
-           kcu.column_name,
+WITH dag AS (
+
+WITH foreignkeys AS (
+
+    SELECT tc.table_schema, tc.constraint_name,
+           tc.table_name, kcu.column_name,
            ccu.table_schema AS foreign_table_schema,
            ccu.table_name AS foreign_table_name,
            ccu.column_name AS foreign_column_name
       FROM information_schema.table_constraints AS tc
-      JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema
-      JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
-     WHERE tc.constraint_type = 'FOREIGN KEY'
-)
+      JOIN information_schema.key_column_usage AS kcu 
+        ON tc.constraint_name = kcu.constraint_name 
+       AND tc.table_schema = kcu.table_schema
+      JOIN information_schema.constraint_column_usage AS ccu 
+        ON ccu.constraint_name = tc.constraint_name 
+       AND ccu.table_schema = tc.table_schema
+     WHERE tc.constraint_type = 'FOREIGN KEY')
+     
 SELECT DISTINCT 
-       c.table_schema, c.table_name, c.column_name, c.ordinal_position, c.is_nullable,
-       c.data_type, c.character_maximum_length, c.numeric_precision, c.numeric_scale,
+       c.table_schema, c.table_name, c.column_name, 
+       c.ordinal_position, c.is_nullable,
+       c.data_type, c.character_maximum_length, 
+       c.numeric_precision, c.numeric_scale,
        f.foreign_table_name
   FROM information_schema.columns c
-  LEFT JOIN foreignkeys f ON c.table_name = f.table_name AND c.column_name = f.column_name
- ORDER BY c.table_schema, c.table_name, c.ordinal_position
-)
-
-SELECT * FROM dag
-ORDER BY table_schema, table_name, ordinal_position
+  LEFT JOIN foreignkeys f ON c.table_name = f.table_name 
+   AND c.column_name = f.column_name
+ ORDER BY c.table_schema, c.table_name, c.ordinal_position)
+ 
+   SELECT * FROM dag
+ ORDER BY table_schema, 
+          table_name, 
+          ordinal_position;
 ```
 
 ### Backlog ###
