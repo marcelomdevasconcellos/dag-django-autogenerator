@@ -1,4 +1,4 @@
-# DAG - django-autogenerate
+# DAG - Django AutoGenerator
 
 ### O que é? ###
 
