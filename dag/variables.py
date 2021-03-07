@@ -22,6 +22,7 @@ CHOICES_CONTENT = """import os
 MODEL_CONTENT = """from django.db import models
 from rest_framework.serializers import ModelSerializer
 from rest_framework.fields import CurrentUserDefault
+from config.mixins import BaseModel
 from .choices import *{% for m in models %}
 {{m.rendered_model}}{% endfor %}"""
 
@@ -32,6 +33,7 @@ import requests
 from django.contrib import admin
 from django.forms import Select, Textarea
 from django.utils.html import format_html
+from config.mixins import AuditoriaAdmin, AuditoriaAdminInline, AuditoriaAdminStackedInline
 
 from .models import ({% for m in models %}
     {{m.title}},{% endfor %}
@@ -42,7 +44,7 @@ from .models import ({% for m in models %}
 MODEL_CLASS = """
 
 
-class {{m.title}}(models.Model):
+class {{m.title}}(BaseModel):
 
     {% for f in fields %}{{f.rendered_model_django}}
     {% endfor %}
@@ -56,7 +58,7 @@ ADMIN_CLASS = """
 
 
 @admin.register({{m.title}})
-class {{m.title}}Admin(admin.ModelAdmin):
+class {{m.title}}Admin(AuditoriaAdmin):
     actions = []
     search_fields = ({% for f in fields %}{% if f.in_search_fields %}
         '{{f.slug}}',{% endif %}{% endfor %}
@@ -68,6 +70,26 @@ class {{m.title}}Admin(admin.ModelAdmin):
         '{{f.slug}}',{% endif %}{% endfor %}
     )
     readonly_fields = ({% for f in fields %}{% if f.is_readonly %}
+        '{{f.slug}}',{% endif %}{% endfor %}
+    )"""
+
+
+ADMIN_INLINE_CLASS = """
+
+
+class {{m.title}}Admin(AuditoriaAdminInline):
+    model = {{m.title}}
+    list_display = ({% for f in fields %}{% if f.in_list_display %}
+        '{{f.slug}}',{% endif %}{% endfor %}
+    )"""
+
+
+ADMIN_STACKED_INLINE_CLASS = """
+
+
+class {{m.title}}Admin(AuditoriaAdminStackedInline):
+    model = {{m.title}}
+    list_display = ({% for f in fields %}{% if f.in_list_display %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )"""
 

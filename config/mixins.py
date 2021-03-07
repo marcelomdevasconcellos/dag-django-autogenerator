@@ -107,7 +107,7 @@ class AuditoriaAdminInline(admin.TabularInline):
     }
 
 
-class AuditoriaAdminStackedInlineInline(admin.StackedInline):
+class AuditoriaAdminStackedInline(admin.StackedInline):
     readonly_fields = (
         'created_at',
         'created_by',
