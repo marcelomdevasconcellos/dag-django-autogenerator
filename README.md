@@ -27,7 +27,7 @@ Este repositório visa ajudar os desenvolvedores a criar um projeto completo uti
 
 ```
 HOST: localhost
-DATABASE: dag_django_autogenerate
+DATABASE: dag_django_autogenerator
 USER: postgres
 PASSWORD: postgres
 PORT: 5432
