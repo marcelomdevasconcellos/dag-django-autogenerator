@@ -131,7 +131,8 @@ class Fields(BaseModel):
 
     model_title = models.CharField(max_length=200, blank=True, null=True)
     fieldtype_title = models.CharField(max_length=100, blank=True, null=True)
-    foreignkey_model_title = models.CharField(max_length=200, blank=True, null=True)
+    foreignkey_model_title = models.CharField(
+        max_length=200, blank=True, null=True)
 
     rendered_model_django = models.TextField(blank=True, null=True)
     rendered_form_django = models.TextField(blank=True, null=True)
@@ -151,11 +152,11 @@ class Fields(BaseModel):
             slug = self.choices.replace('|', ",'").replace('\n', "'),\n    (")
             return "[\n    (%s'), \n]" % unidecode.unidecode(slug)
         elif self.fieldtype_title == 'CharField':
-            slug = self.choices.replace('|', "', '").replace('\n', "'),\n    ('")
+            slug = self.choices.replace(
+                '|', "', '").replace('\n', "'),\n    ('")
             return "[\n    ('%s'),\n]" % unidecode.unidecode(slug)
         else:
             return "[(None,'erro'),]"
-
 
     def slug_unicode(self):
         import unidecode
@@ -237,4 +238,45 @@ class Variables(BaseModel):
     class Meta:
         verbose_name = _('Variable')
         verbose_name_plural = _('Variables')
+        ordering = ['title']
+
+
+class BusinessRules(BaseModel):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    app_title = models.CharField(max_length=200)
+    model_title = models.CharField(max_length=200)
+    model = models.ForeignKey(
+        'Models',
+        on_delete=models.DO_NOTHING,
+        related_name='%(class)s_model',
+        null=True,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Business Rule')
+        verbose_name_plural = _('Business Rules')
+        ordering = ['title']
+
+
+class BusinessRulesCode(BaseModel):
+    business_rule = models.ForeignKey(
+        'BusinessRules',
+        on_delete=models.DO_NOTHING,
+        related_name='%(class)s_business_rule',
+        null=True,
+    )
+    title = models.CharField(max_length=200)
+    func = models.CharField(choices=BUSINESS_RULE_FUNCTIONS, max_length=30)
+    code = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Business Rule')
+        verbose_name_plural = _('Business Rules')
         ordering = ['title']

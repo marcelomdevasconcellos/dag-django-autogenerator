@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import Select, Textarea
 
-from dag.models import Models, Apps, FieldTypes, Fields, ModelFunctions, CustomModels, Variables
+from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, FieldTypes, Fields, ModelFunctions, CustomModels, Variables
 from config.mixins import AuditoriaAdmin, AuditoriaAdminInline
 
 
@@ -11,7 +11,8 @@ def render_fields(modeladmin, request, queryset):
         context = {
             'f': obj,
         }
-        template = '{% load templatetags %}{% autoescape off %}' + obj.type.model_code + '{% endautoescape %}'
+        template = '{% load templatetags %}{% autoescape off %}' + \
+            obj.type.model_code + '{% endautoescape %}'
         t = Template(template)
         context = Context(context)
         rendered_model_django = t.render(context)
@@ -113,7 +114,6 @@ class FieldsInline(AuditoriaAdminInline):
     )
 
 
-
 class ModelsInline(AuditoriaAdminInline):
     model = Models
     extra = 4
@@ -195,7 +195,6 @@ class FieldsAdmin(AuditoriaAdmin):
         'updated_at',
         'updated_by',
     )
-
 
 
 @admin.register(Models)
@@ -293,4 +292,33 @@ class VariablesAdmin(AuditoriaAdmin):
         'title',
         'key',
         'code',
+    )
+
+
+class BusinessRulesCodeInline(AuditoriaAdminInline):
+    model = BusinessRulesCode
+    extra = 4
+    list_display = (
+        'title',
+        'func',
+        'code',
+    )
+
+
+@admin.register(BusinessRules)
+class BusinessRulesAdmin(AuditoriaAdmin):
+    search_fields = (
+        'title',
+        'description',
+    )
+    list_filter = (
+        'app_title',
+        'model_title',
+        'model')
+    list_display = (
+        'title',
+        'description',
+        'app_title',
+        'model_title',
+        'model'
     )
