@@ -92,6 +92,29 @@ class {{m.title}}Admin(AuditoriaAdmin):
     ]"""
 
 
+FORM_CONTENT = """from datetime import datetime, date
+
+from django import forms
+from django.forms import widgets
+from django.db.models import Q
+
+from django_currentuser.middleware import get_current_user{% for m in models %}
+
+
+class {{m.title}}Form(forms.ModelForm):
+    class Meta:
+        model = {{m.title}}
+        fields = '__all__'{% endfor %}"""
+
+
+FORM_CLASS = """
+
+class {{m.title}}Form(forms.ModelForm):
+    class Meta:
+        model = {{m.title}}
+        fields = '__all__' """
+
+
 FIELD_CHARFIELD = """{{f.slug_unicode}} = models.CharField(
         '{{f.verbose_name}}', {% if f.help_text %}
         help_text='{{f.help_text}}', {% endif %}{% if f.choices %}
