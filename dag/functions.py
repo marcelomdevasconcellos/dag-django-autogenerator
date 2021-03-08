@@ -2,7 +2,8 @@ from dag.models import Models, Fields, FieldTypes, Apps, ModelFunctions
 
 
 def save_file(filename, content):
-    file = open(filename, "w")
+    import codecs
+    file = codecs.open(filename, "w", "utf-8")
     file.write(content)
     file.close()
 

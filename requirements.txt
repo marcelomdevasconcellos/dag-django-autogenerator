@@ -28,3 +28,5 @@ openpyxl==3.0.6
 termcolor==1.1.0
 django-ajax-selects==2.1.0 #https://dev.to/thearjun/implement-autocomplete-in-django-3h20
 django-admin-rangefilter==0.7.0 # https://github.com/silentsokolov/django-admin-rangefilter
+pyexcel-ods3==0.6.0
+requests==2.25.1

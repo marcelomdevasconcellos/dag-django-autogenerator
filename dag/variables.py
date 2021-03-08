@@ -19,7 +19,9 @@ CHOICES_CONTENT = """import os
 {% endif %}{% endfor %}"""
 
 
-MODEL_CONTENT = """from django.db import models
+MODEL_CONTENT = """import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+from django.db import models
 from rest_framework.serializers import ModelSerializer
 from rest_framework.fields import CurrentUserDefault
 from config.mixins import BaseModel
@@ -27,7 +29,9 @@ from .choices import *{% for m in models %}
 {{m.rendered_model}}{% endfor %}"""
 
 
-ADMIN_CONTENT = """from datetime import datetime
+ADMIN_CONTENT = """import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+from datetime import datetime
 import requests
 
 from django.contrib import admin
