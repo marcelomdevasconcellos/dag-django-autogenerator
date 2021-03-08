@@ -13,3 +13,9 @@ BUSINESS_RULE_FUNCTIONS = (
     ('ADMIN_CUSTOM_FILTER', 'ADMIN_CUSTOM_FILTER'),
     ('ADMIN_CUSTOM_COLUMN', 'ADMIN_CUSTOM_COLUMN'),
 )
+
+
+INLINE_TYPE = (
+    ('TabularInline', 'TabularInline'),
+    ('StackedInline', 'StackedInline'),
+)

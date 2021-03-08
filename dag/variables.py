@@ -37,7 +37,7 @@ import requests
 from django.contrib import admin
 from django.forms import Select, Textarea
 from django.utils.html import format_html
-from config.mixins import AuditoriaAdmin, AuditoriaAdminInline, AuditoriaAdminStackedInline
+from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline, AuditoriaAdminStackedInline
 
 from .models import ({% for m in models %}
     {{m.title}},{% endfor %}
@@ -65,7 +65,7 @@ ADMIN_CLASS = """
 
 
 {% for mi in m.inline_models.all %}
-class {{mi.title}}InlineAdmin(AuditoriaAdminInline):
+class {{mi.title}}InlineAdmin(AuditoriaAdmin{% if mi.django_inline_type %}{{mi.django_inline_type}}{% else %}TabularInline{% endif %}):
     model = {{mi.title}}
     list_display = ({% for f in mi.fields %}{% if f.in_list_display %}
         '{{f.slug}}',{% endif %}{% endfor %}

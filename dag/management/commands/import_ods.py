@@ -5,7 +5,7 @@ from termcolor import colored
 
 
 def import_apps(data_list):
-    fields = ['id','title','slug','verbose_name']
+    fields = ['id', 'title', 'slug', 'verbose_name']
     for d in data_list:
         if len(d):
             dic = {}
@@ -20,6 +20,7 @@ def import_models(data_list):
     fields = [
         'id', 'title', 'verbose_name',
         'verbose_name_plural', 'django_modeladmin', 'django_inline_models',
+        'django_inline_type',
         'app_slug', 'is_empty', 'quant']
 
     for d in data_list:
@@ -27,11 +28,12 @@ def import_models(data_list):
             dic = {}
             for f in range(len(fields)):
                 dic[fields[f]] = d[f]
-            
+
             try:
                 dic['app_id'] = Apps.objects.get(slug=dic['app_slug']).id
             except:
-                print(colored('Erro ao tentar localizar um App com o "slug" igual a %s' % dic['app_slug'], 'red'))
+                print(colored(
+                    'Erro ao tentar localizar um App com o "slug" igual a %s' % dic['app_slug'], 'red'))
                 return None
 
             obj = Models(**dic)
@@ -39,7 +41,7 @@ def import_models(data_list):
 
 
 def import_fieldtypes(data_list):
-    fields = ['id','title','model_code']
+    fields = ['id', 'title', 'model_code']
     for d in data_list:
         if len(d):
             dic = {}
@@ -69,27 +71,34 @@ def import_fields(data_list):
                     dic[fields[f]] = d[f]
 
             try:
-                dic['model_id'] = Models.objects.get(title=dic['model_title']).id
+                dic['model_id'] = Models.objects.get(
+                    title=dic['model_title']).id
             except:
-                print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' % dic['model_title'], 'red'))
+                print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' %
+                              dic['model_title'], 'red'))
                 return None
-            
+
             try:
-                dic['fieldtype_id'] = FieldTypes.objects.get(title=dic['fieldtype_title']).id
+                dic['fieldtype_id'] = FieldTypes.objects.get(
+                    title=dic['fieldtype_title']).id
             except:
-                print(colored('Erro ao tentar localizar um FieldType com o "title" igual a %s' % dic['fieldtype_title'], 'red'))
+                print(colored('Erro ao tentar localizar um FieldType com o "title" igual a %s' %
+                              dic['fieldtype_title'], 'red'))
                 return None
 
             if 'foreignkey_model_title' in dic:
 
                 try:
-                    dic['foreignkey_id'] = Models.objects.get(title=dic['foreignkey_model_title']).id
+                    dic['foreignkey_id'] = Models.objects.get(
+                        title=dic['foreignkey_model_title']).id
                 except:
-                    print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' % dic['foreignkey_model_title'], 'red'))
+                    print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' %
+                                  dic['foreignkey_model_title'], 'red'))
                     return None
 
             obj = Fields(**dic)
             obj.save()
+
 
 def update_inline_models():
     models = Models.objects.filter(django_inline_models__isnull=False).all()

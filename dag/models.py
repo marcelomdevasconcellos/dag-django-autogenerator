@@ -54,6 +54,8 @@ class Models(BaseModel):
     app_slug = models.CharField(max_length=200)
     django_modeladmin = models.BooleanField(default=True)
     django_inline_models = models.TextField(blank=True, null=True)
+    django_inline_type = models.CharField(
+        max_length=30, blank=True, null=True, choices=INLINE_TYPE)
 
     rendered_model = models.TextField(blank=True, null=True)
     rendered_form = models.TextField(blank=True, null=True)

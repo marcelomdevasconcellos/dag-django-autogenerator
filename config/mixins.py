@@ -13,7 +13,8 @@ class MultiFieldSortableChangeList(ChangeList):
     def get_ordering(self, request, queryset):
         ORDER_VAR = admin.views.main.ORDER_VAR
         params = self.params
-        ordering = list(self.model_admin.get_ordering(request) or self._get_default_ordering())
+        ordering = list(self.model_admin.get_ordering(
+            request) or self._get_default_ordering())
 
         if ORDER_VAR in params:
             ordering = []
@@ -85,7 +86,7 @@ class AuditoriaAdmin(VersionAdmin):
     )
 
 
-class AuditoriaAdminInline(admin.TabularInline):
+class AuditoriaAdminTabularInline(admin.TabularInline):
     readonly_fields = (
         'created_at',
         'created_by',

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import Select, Textarea
 
 from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, FieldTypes, Fields, ModelFunctions, CustomModels, Variables
-from config.mixins import AuditoriaAdmin, AuditoriaAdminInline
+from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline
 
 
 def render_fields(modeladmin, request, queryset):
@@ -74,7 +74,7 @@ def verify_empty_tables(modeladmin, request, queryset):
 verify_empty_tables.short_description = "Verify empty tables"
 
 
-class FieldsInline(AuditoriaAdminInline):
+class FieldsInline(AuditoriaAdminTabularInline):
     model = Fields
     fk_name = 'model'
     extra = 4
@@ -114,7 +114,7 @@ class FieldsInline(AuditoriaAdminInline):
     )
 
 
-class ModelsInline(AuditoriaAdminInline):
+class ModelsInline(AuditoriaAdminTabularInline):
     model = Models
     extra = 4
     list_display = (
@@ -295,7 +295,7 @@ class VariablesAdmin(AuditoriaAdmin):
     )
 
 
-class BusinessRulesCodeInline(AuditoriaAdminInline):
+class BusinessRulesCodeInline(AuditoriaAdminTabularInline):
     model = BusinessRulesCode
     extra = 4
     list_display = (
