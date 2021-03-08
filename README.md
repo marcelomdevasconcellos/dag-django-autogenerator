@@ -100,7 +100,8 @@ SELECT DISTINCT
 - Inclusão de range date nos filtros de data;
 - Inclusão de geração do django restframework;
 - Inclusão de classe para páginas especiais;
-- Incluir parâmetro do caminho e nome do arquivo em import_ods
+- Salvar um arquivo com saidas das sugestões de correção;
+- Incluir parâmetro do caminho e nome do arquivo em import_ods;
 - Transformar em um extensão do python/django;
 
 
