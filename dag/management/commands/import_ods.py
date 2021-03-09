@@ -28,7 +28,12 @@ def import_models(data_list):
             dic = {}
             for f in range(len(fields)):
                 dic[fields[f]] = d[f]
-
+                if d[f] and d[f] == 'TRUE':
+                    dic[fields[f]] = True
+                elif d[f] and d[f] == 'FALSE':
+                    dic[fields[f]] = False
+                elif d[f] and d[f] != 'NULL':
+                    dic[fields[f]] = d[f]
             try:
                 dic['app_id'] = Apps.objects.get(slug=dic['app_slug']).id
             except:

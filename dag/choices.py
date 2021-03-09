@@ -3,6 +3,7 @@ FIELDTYPES = (
     ('IntegerField', 'IntegerField'),
     ('TextField', 'TextField'),
     ('DateField', 'DateField'),
+    ('BooleanField', 'BooleanField'),
 )
 
 
