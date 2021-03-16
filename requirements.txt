@@ -22,7 +22,7 @@ unidecode==1.1.1
 django_extensions==3.0.3
 pydotplus==2.0.2
 graphviz==0.14.1
-pandas==1.2.0
+pandas
 xlrd==2.0.1
 openpyxl==3.0.6
 termcolor==1.1.0
