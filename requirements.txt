@@ -9,8 +9,8 @@ django-timezone-field==3.0
 django-wkhtmltopdf==3.2.0
 djangorestframework==3.10.2
 goslate==1.5.1
-psycopg2==2.8.3
 psycopg2-binary==2.8.3
+psycopg2==2.8.3
 django-reversion==3.0.4
 django-automated-logging==6.1.0
 django-log-viewer==1.1.2
