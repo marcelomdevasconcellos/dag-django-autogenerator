@@ -177,6 +177,14 @@ FIELD_BOOLEANFIELD = """{{f.slug_unicode}} = models.BooleanField(
         default={% if f.default_value %}{{f.default_value}}{% endif %}, {% endif %})"""
 
 
+
+FIELD_NULLBOOLEANFIELD = """{{f.slug_unicode}} = models.NullBooleanField(
+        '{{f.verbose_name}}', {% if f.help_text %}
+        help_text='{{f.help_text}}', {% endif %}{% if f.is_blank %}
+        blank=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        default={% if f.default_value %}{{f.default_value}}{% endif %}, {% endif %})"""
+
+
 FIELD_TYPES = {
     'IntegerField': FIELD_INTEGERFIELD,
     'CharField': FIELD_CHARFIELD,
@@ -185,4 +193,5 @@ FIELD_TYPES = {
     'ForeignKey': FIELD_FOREIGNKEY,
     'TextField': FIELD_TEXTFIELD,
     'BooleanField': FIELD_BOOLEANFIELD,
+    'NullBooleanField': FIELD_NULLBOOLEANFIELD,
 }
