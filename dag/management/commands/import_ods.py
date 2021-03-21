@@ -127,6 +127,7 @@ def import_ods():
 
     data = get_data("dag_plan.ods")
     import_apps(data['dag_apps'][1:])
+    import_fieldtypes(data['dag_fieldtypes'][1:])
     import_models(data['dag_models'][1:])
     import_fields(data['dag_fields'][1:])
     update_inline_models()
