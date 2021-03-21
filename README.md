@@ -75,17 +75,23 @@ WITH foreignkeys AS (
      WHERE tc.constraint_type = 'FOREIGN KEY')
      
 SELECT DISTINCT 
-       c.table_schema, c.table_name, c.column_name, 
+       c.table_schema, c.table_name, 
+	   REPLACE(INITCAP(REPLACE(c.table_name, '_', ' ')), ' ', '') AS model_title,
+	   c.column_name, 
        c.ordinal_position, c.is_nullable,
-       c.data_type, c.character_maximum_length, 
-       c.numeric_precision, c.numeric_scale,
-       f.foreign_table_name
+       c.data_type, 
+	   COALESCE(c.character_maximum_length::TEXT, '') AS character_maximum_length, 
+       c.numeric_precision, 
+	   c.numeric_scale,
+       COALESCE(f.foreign_table_name, '') AS foreign_table_name,
+       REPLACE(INITCAP(REPLACE(COALESCE(f.foreign_table_name, ''), '_', ' ')), ' ', '') AS foreign_model_title
   FROM information_schema.columns c
   LEFT JOIN foreignkeys f ON c.table_name = f.table_name 
    AND c.column_name = f.column_name
  ORDER BY c.table_schema, c.table_name, c.ordinal_position)
  
    SELECT * FROM dag
+   WHERE table_schema='public'
  ORDER BY table_schema, 
           table_name, 
           ordinal_position;
