@@ -77,13 +77,13 @@ WITH foreignkeys AS (
      
 SELECT DISTINCT 
        c.table_schema, c.table_name, 
-	   REPLACE(INITCAP(REPLACE(c.table_name, '_', ' ')), ' ', '') AS model_title,
-	   c.column_name, 
+       REPLACE(INITCAP(REPLACE(c.table_name, '_', ' ')), ' ', '') AS model_title,
+       c.column_name, 
        c.ordinal_position, c.is_nullable,
        c.data_type, 
-	   COALESCE(c.character_maximum_length::TEXT, '') AS character_maximum_length, 
+       COALESCE(c.character_maximum_length::TEXT, '') AS character_maximum_length, 
        c.numeric_precision, 
-	   c.numeric_scale,
+       c.numeric_scale,
        COALESCE(f.foreign_table_name, '') AS foreign_table_name,
        REPLACE(INITCAP(REPLACE(COALESCE(f.foreign_table_name, ''), '_', ' ')), ' ', '') AS foreign_model_title
   FROM information_schema.columns c
