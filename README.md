@@ -92,7 +92,7 @@ SELECT DISTINCT
  ORDER BY c.table_schema, c.table_name, c.ordinal_position)
  
    SELECT * FROM dag
-   WHERE table_schema='public'
+    WHERE table_schema='public'
  ORDER BY table_schema, 
           table_name, 
           ordinal_position;
