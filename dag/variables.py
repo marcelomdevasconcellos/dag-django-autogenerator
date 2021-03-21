@@ -19,8 +19,8 @@ CHOICES_CONTENT = """import os
 {% endif %}{% endfor %}"""
 
 
-MODEL_CONTENT = """import locale
-locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+MODEL_CONTENT = """# import locale
+# locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 from django.db import models
 from rest_framework.serializers import ModelSerializer
 from rest_framework.fields import CurrentUserDefault
@@ -29,8 +29,8 @@ from .choices import *{% for m in models %}
 {{m.rendered_model}}{% endfor %}"""
 
 
-ADMIN_CONTENT = """import locale
-locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+ADMIN_CONTENT = """# import locale
+# locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 from datetime import datetime
 import requests
 
@@ -39,9 +39,9 @@ from django.forms import Select, Textarea
 from django.utils.html import format_html
 from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline, AuditoriaAdminStackedInline
 
-from .models import ({% for m in models %}
+{% if models %}from .models import ({% for m in models %}
     {{m.title}},{% endfor %}
-){% for m in models %}
+){% endif %}{% for m in models %}
 {{m.rendered_admin}}{% endfor %}"""
 
 
@@ -56,6 +56,9 @@ class {{m.title}}(BaseModel):
     {% for f in fields %}{{f.rendered_model_django}}
     {% endfor %}
 
+    def __str__(self):
+        return {{m.model_str}}
+
     class Meta:
         verbose_name = '{{m.verbose_name}}'
         verbose_name_plural = '{{m.verbose_name_plural}}'"""
@@ -64,10 +67,10 @@ class {{m.title}}(BaseModel):
 ADMIN_CLASS = """
 
 
-{% for mi in m.inline_models.all %}
-class {{mi.title}}InlineAdmin(AuditoriaAdmin{% if mi.django_inline_type %}{{mi.django_inline_type}}{% else %}TabularInline{% endif %}):
-    model = {{mi.title}}
-    list_display = ({% for f in mi.fields %}{% if f.in_list_display %}
+{% for mi in m.modelsinline_model.all %}
+class {{mi.model_inline.title}}InlineAdmin(AuditoriaAdmin{% if mi.type_inline %}{{mi.type_inline}}{% else %}TabularInline{% endif %}):
+    model = {{mi.model_inline.title}}
+    list_display = ({% for f in mi.model_inline.fields %}{% if f.in_list_display %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )
 
@@ -87,9 +90,18 @@ class {{m.title}}Admin(AuditoriaAdmin):
     readonly_fields = AuditoriaAdmin.readonly_fields + ({% for f in fields %}{% if f.is_readonly %}
         '{{f.slug}}',{% endif %}{% endfor %}
     )
-    inlines = [{% for mi in m.inline_models.all %}
-        {{mi.title}}InlineAdmin,{% endfor %}
-    ]"""
+    inlines = [{% for mi in m.modelsinline_model.all %}
+        {{mi.model_inline.title}}InlineAdmin,{% endfor %}
+    ]{% if m.is_read_only %}
+    
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False{% endif %}"""
 
 
 FORM_CONTENT = """from datetime import datetime, date

@@ -1,6 +1,6 @@
 import time
 from django.core.management.base import BaseCommand, CommandError
-from dag.models import Apps, Models, Fields, FieldTypes
+from dag.models import Apps, Models, Fields, FieldTypes, ModelsInline
 from termcolor import colored
 
 
@@ -19,18 +19,17 @@ def import_models(data_list):
 
     fields = [
         'id', 'title', 'verbose_name',
-        'verbose_name_plural', 'django_modeladmin', 'django_inline_models',
-        'django_inline_type',
+        'verbose_name_plural', 'is_model_admin', 'is_read_only', 'django_inline_models',
         'app_slug', 'is_empty', 'quant']
 
     for d in data_list:
-        if len(d):
+        if len(d) and len(d) == len(fields):
             dic = {}
             for f in range(len(fields)):
                 dic[fields[f]] = d[f]
-                if d[f] and d[f] == 'TRUE':
+                if d[f] and d[f] in ('TRUE', 'YES', 1):
                     dic[fields[f]] = True
-                elif d[f] and d[f] == 'FALSE':
+                elif d[f] and d[f] in ('FALSE', 'NO', 0):
                     dic[fields[f]] = False
                 elif d[f] and d[f] != 'NULL':
                     dic[fields[f]] = d[f]
@@ -68,9 +67,9 @@ def import_fields(data_list):
         if len(d):
             dic = {}
             for f in range(len(fields)):
-                if d[f] and d[f] == 'TRUE':
+                if d[f] and d[f] in ('TRUE', 'YES', 1):
                     dic[fields[f]] = True
-                elif d[f] and d[f] == 'FALSE':
+                elif d[f] and d[f] in ('FALSE', 'NO', 0):
                     dic[fields[f]] = False
                 elif d[f] and d[f] != 'NULL':
                     dic[fields[f]] = d[f]
@@ -106,15 +105,15 @@ def import_fields(data_list):
 
 
 def update_inline_models():
-    models = Models.objects.filter(django_inline_models__isnull=False).all()
+    models = Models.objects.\
+        filter(django_inline_models__isnull=False).\
+        exclude(django_inline_models='').all()
     for m in models:
-        if m.django_inline_models.strip():
-            inline_models = m.django_inline_models.split(',')
-            for i in inline_models:
-                i = i.strip()
-                print(i)
-                model_inline = Models.objects.get(title=i)
-                m.inline_models.add(model_inline)
+        for i in m.inline_list():
+            mi = Models.objects.get(title=i[0])
+            dic = {'model':m, 'model_inline': mi, 'type_inline': i[1]}
+            obj = ModelsInline(**dic)
+            obj.save()
 
 
 def import_ods():
@@ -122,13 +121,13 @@ def import_ods():
     import json
 
     Fields.objects.all().delete()
+    ModelsInline.objects.all().delete()
     Models.objects.all().delete()
     Apps.objects.all().delete()
 
-    data = get_data("plan.ods")
+    data = get_data("dag_plan.ods")
     import_apps(data['dag_apps'][1:])
     import_models(data['dag_models'][1:])
-    import_fieldtypes(data['dag_fieldtypes'][1:])
     import_fields(data['dag_fields'][1:])
     update_inline_models()
 

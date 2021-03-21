@@ -42,29 +42,40 @@ class Models(BaseModel):
         on_delete=models.CASCADE,
         related_name='%(class)s_models'
     )
-    inline_models = models.ManyToManyField(
-        'Models',
-        related_name='%(class)s_models',
-        blank=True,
-    )
 
     title = models.CharField(max_length=200, unique=True)
     verbose_name = models.CharField(max_length=200)
     verbose_name_plural = models.CharField(max_length=200)
     app_slug = models.CharField(max_length=200)
-    django_modeladmin = models.BooleanField(default=True)
+    is_model_admin = models.BooleanField(default=True)
+    is_read_only = models.BooleanField(default=False)
     django_inline_models = models.TextField(blank=True, null=True)
-    django_inline_type = models.CharField(
-        max_length=30, blank=True, null=True, choices=INLINE_TYPE)
-
+    
     rendered_model = models.TextField(blank=True, null=True)
     rendered_form = models.TextField(blank=True, null=True)
     rendered_admin = models.TextField(blank=True, null=True)
     is_empty = models.BooleanField(default=True)
     quant = models.IntegerField(default=0)
 
+    def inline_list(self):
+        import unidecode
+        inlines = []
+        inl = self.django_inline_models.split('\n')
+        for i in inl:
+            inlines.append(i.split('|'))
+        return inlines
+
     def fields(self):
         return Fields.objects.filter(model=self.id).all()
+
+    def model_str(self):
+        fields = Fields.objects.filter(model=self.id, is_model_title=True).all()
+        var = []
+        emp = []
+        for f in fields:
+            var.append('self.' + f.slug)
+            emp.append('{}')
+        return "'{}'.format({})".format(' - '.join(emp), ', '.join(var))
 
     def title_unicode(self):
         import unidecode
@@ -79,6 +90,32 @@ class Models(BaseModel):
         verbose_name_plural = _('Models')
         ordering = ['app', 'title']
         unique_together = ['app', 'title']
+
+
+class ModelsInline(BaseModel):
+
+    model = models.ForeignKey(
+        'Models',
+        on_delete=models.CASCADE,
+        related_name='%(class)s_model',
+    )
+
+    model_inline = models.ForeignKey(
+        'Models',
+        on_delete=models.CASCADE,
+        related_name='%(class)s_model_inline',
+    )
+
+    type_inline = models.CharField(max_length=20, default='TabularInline')
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.model, self.model_inline, self.type_inline)
+
+    class Meta:
+        verbose_name = _('Inline Model')
+        verbose_name_plural = _('Inline Models')
+        ordering = ['model', 'model_inline', 'type_inline']
+        unique_together = ['model', 'model_inline', 'type_inline']
 
 
 class Fields(BaseModel):

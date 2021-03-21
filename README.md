@@ -41,7 +41,8 @@ PORT: 5432
 8. Execute o projeto: ```python manage.py runserver ```
 
 ### Como usar? ###
-1. Acesse a planilha 'plan.ods' no diretório raiz e preencha os campos exatamente como deseja que os modelos sejam criados.
+1. Acesse a planilha 'plan.ods' no diretório raiz e preencha os campos exatamente como deseja que os modelos sejam criados. Visualize a planilha original no Google Sheets através do link ```https://docs.google.com/spreadsheets/d/1uN7JyCSBc48a_opuZ-0MmugiEgjFmJ-E3B_P3pQcxBQ/edit?usp=sharing```
+
 
 2. Execute a função abaixo para importar os dados da planilha para o banco de dados: ```python manage.py import_ods ```
 
