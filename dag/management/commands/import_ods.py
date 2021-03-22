@@ -141,5 +141,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print(f'DAG File loading: {options["file"]}') if options["file"] else None
-        file_argument = options["file"] or "plan.ods"
+        file_argument = options["file"] or "dag_plan.ods"
         import_ods(file_argument)
