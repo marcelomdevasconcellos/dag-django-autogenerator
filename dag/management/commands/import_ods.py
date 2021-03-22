@@ -140,6 +140,7 @@ class Command(BaseCommand):
         parser.add_argument('--file')
 
     def handle(self, *args, **options):
-        print(f'DAG File loading: {options["file"]}') if options["file"] else None
         file_argument = options["file"] or "dag_plan.ods"
+        print(f'DAG File loading: {file_argument}')
+        print(f"Run 'python manage.py create_apps' for create apps in your project.")
         import_ods(file_argument)

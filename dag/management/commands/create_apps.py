@@ -11,7 +11,6 @@ class Command(BaseCommand):
     help = 'Criar APPS, MODELS, ADMINS'
 
     def handle(self, *args, **options):
-        import_ods()
         errors = check_database()
         if not errors:
             print(colored("Gerando os arquivos da aplicação...", "white", attrs=['bold']))
