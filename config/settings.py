@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',  # https://django-debug-toolbar.readthedocs.io/en/latest/index.html
     'treebeard',  # https://github.com/wuyue92tree/django-adminlte-ui
     'ajax_select',  # https://dev.to/thearjun/implement-autocomplete-in-django-3h20
     'reversion',
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -139,3 +141,11 @@ USE_THOUSAND_SEPARATOR = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Django Debug-Toolbar
+# The Debug Toolbar is shown only if your IP address is listed in the INTERNAL_IPS setting. 
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost',
+]

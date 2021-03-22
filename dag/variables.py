@@ -41,8 +41,8 @@ from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline, Auditoria
 
 {% if models %}from .models import ({% for m in models %}
     {{m.title}},{% endfor %}
-){% endif %}{% for m in models %}
-{{m.rendered_admin}}{% endfor %}"""
+){% endif %}{% for m in models %}{% if m.is_model_admin %}
+{{m.rendered_admin}}{% endif %}{% endfor %}"""
 
 
 MODEL_CLASS = """
