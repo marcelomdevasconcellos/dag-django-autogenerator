@@ -117,7 +117,7 @@ def update_inline_models():
                 m.inline_models.add(model_inline)
 
 
-def import_ods():
+def import_ods(plan_file):
     from pyexcel_ods3 import get_data
     import json
 
@@ -125,7 +125,7 @@ def import_ods():
     Models.objects.all().delete()
     Apps.objects.all().delete()
 
-    data = get_data("plan.ods")
+    data = get_data(plan_file)
     import_apps(data['dag_apps'][1:])
     import_models(data['dag_models'][1:])
     import_fieldtypes(data['dag_fieldtypes'][1:])
@@ -136,5 +136,10 @@ def import_ods():
 class Command(BaseCommand):
     help = 'Importar planilha ODS'
 
+    def add_arguments(self, parser):
+        parser.add_argument('--file')
+
     def handle(self, *args, **options):
-        import_ods()
+        print(f'DAG File loading: {options["file"]}') if options["file"] else None
+        file_argument = options["file"] or "plan.ods"
+        import_ods(file_argument)
