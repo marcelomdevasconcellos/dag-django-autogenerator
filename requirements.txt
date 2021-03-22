@@ -7,7 +7,7 @@ django-localflavor==2.2
 django-localflavor-br==1.0
 django-timezone-field==3.0
 django-wkhtmltopdf==3.2.0
-djangorestframework==3.10.2
+djangorestframework==3.11.2
 goslate==1.5.1
 psycopg2-binary==2.8.3
 psycopg2==2.8.3
