@@ -41,7 +41,8 @@ PORT: 5432
 8. Execute o projeto: ```python manage.py runserver ```
 
 ### Como usar? ###
-1. Acesse a planilha 'plan.ods' no diretório raiz e preencha os campos exatamente como deseja que os modelos sejam criados.
+1. Acesse a planilha 'plan.ods' no diretório raiz e preencha os campos exatamente como deseja que os modelos sejam criados. Visualize a planilha original no Google Sheets através do link ```https://docs.google.com/spreadsheets/d/1uN7JyCSBc48a_opuZ-0MmugiEgjFmJ-E3B_P3pQcxBQ/edit?usp=sharing```
+
 
 2. Execute a função abaixo para importar os dados da planilha para o banco de dados: ```python manage.py import_ods ```
 
@@ -75,17 +76,23 @@ WITH foreignkeys AS (
      WHERE tc.constraint_type = 'FOREIGN KEY')
      
 SELECT DISTINCT 
-       c.table_schema, c.table_name, c.column_name, 
+       c.table_schema, c.table_name, 
+       REPLACE(INITCAP(REPLACE(c.table_name, '_', ' ')), ' ', '') AS model_title,
+       c.column_name, 
        c.ordinal_position, c.is_nullable,
-       c.data_type, c.character_maximum_length, 
-       c.numeric_precision, c.numeric_scale,
-       f.foreign_table_name
+       c.data_type, 
+       COALESCE(c.character_maximum_length::TEXT, '') AS character_maximum_length, 
+       c.numeric_precision, 
+       c.numeric_scale,
+       COALESCE(f.foreign_table_name, '') AS foreign_table_name,
+       REPLACE(INITCAP(REPLACE(COALESCE(f.foreign_table_name, ''), '_', ' ')), ' ', '') AS foreign_model_title
   FROM information_schema.columns c
   LEFT JOIN foreignkeys f ON c.table_name = f.table_name 
    AND c.column_name = f.column_name
  ORDER BY c.table_schema, c.table_name, c.ordinal_position)
  
    SELECT * FROM dag
+    WHERE table_schema='public'
  ORDER BY table_schema, 
           table_name, 
           ordinal_position;

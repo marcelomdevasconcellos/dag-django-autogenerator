@@ -208,8 +208,9 @@ class ModelsAdmin(AuditoriaAdmin):
         'verbose_name_plural',
     )
     list_filter = (
-        'django_modeladmin',
         'is_empty',
+        'is_model_admin',
+        'is_read_only',
         'app',
     )
     list_display = (
@@ -217,7 +218,8 @@ class ModelsAdmin(AuditoriaAdmin):
         'title',
         'verbose_name',
         'verbose_name_plural',
-        'django_modeladmin',
+        'is_model_admin',
+        'is_read_only',
         'is_empty',
     )
     inlines = [
