@@ -102,13 +102,11 @@ SELECT DISTINCT
 
 - Geração de forms;
 - Inclusão de regras de negócio;
-- Inclusão do tipo de inline na planilha e geração (TabularInline/StackedInline);
 - Inclusão de autocomplete;
 - Inclusão de range date nos filtros de data;
 - Inclusão de geração do django restframework;
 - Inclusão de classe para páginas especiais;
 - Salvar um arquivo com saidas das sugestões de correção;
-- Incluir parâmetro do caminho e nome do arquivo em import_ods;
 - Transformar em um extensão do python/django;
 
 
