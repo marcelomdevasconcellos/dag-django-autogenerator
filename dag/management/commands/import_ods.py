@@ -21,7 +21,6 @@ def import_models(data_list):
         'id', 'title', 'verbose_name',
         'verbose_name_plural', 'is_model_admin', 'is_read_only', 'django_inline_models',
         'app_slug', 'is_empty', 'quant']
-
     for d in data_list:
         if len(d) and len(d) == len(fields):
             dic = {}
@@ -37,9 +36,8 @@ def import_models(data_list):
                 dic['app_id'] = Apps.objects.get(slug=dic['app_slug']).id
             except:
                 print(colored(
-                    'Erro ao tentar localizar um App com o "slug" igual a %s' % dic['app_slug'], 'red'))
+                    '[dag_models] Erro ao tentar localizar um App com o "slug" igual a %s' % dic['app_slug'], 'red'))
                 return None
-
             obj = Models(**dic)
             obj.save()
 
@@ -78,15 +76,14 @@ def import_fields(data_list):
                 dic['model_id'] = Models.objects.get(
                     title=dic['model_title']).id
             except:
-                print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' %
+                print(colored('[dag_models] Erro ao tentar localizar um Model com o "title" igual a %s' %
                               dic['model_title'], 'red'))
                 return None
 
             try:
-                dic['fieldtype_id'] = FieldTypes.objects.get(
-                    title=dic['fieldtype_title']).id
+                dic['fieldtype_id'] = FieldTypes.objects.get(title=dic['fieldtype_title']).id
             except:
-                print(colored('Erro ao tentar localizar um FieldType com o "title" igual a %s' %
+                print(colored('[dag_models] Erro ao tentar localizar um FieldType com o "fieldtype" igual a %s' %
                               dic['fieldtype_title'], 'red'))
                 return None
 
@@ -96,10 +93,9 @@ def import_fields(data_list):
                     dic['foreignkey_id'] = Models.objects.get(
                         title=dic['foreignkey_model_title']).id
                 except:
-                    print(colored('Erro ao tentar localizar um Model com o "title" igual a %s' %
+                    print(colored('[dag_models] Erro ao tentar localizar um Model com o "foreignkey" igual a %s' %
                                   dic['foreignkey_model_title'], 'red'))
                     return None
-
             obj = Fields(**dic)
             obj.save()
 

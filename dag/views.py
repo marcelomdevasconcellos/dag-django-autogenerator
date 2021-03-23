@@ -107,7 +107,7 @@ def create_apps_function(for_print=True):
             path.join(BASE_DIR, app.slug, 'choices.py'),
             rendered_choices)
         if for_print:
-            print(colored("%s ... OK" % app.title), "green")
+            print(colored("%s ... OK" % app.title, "green"))
 
 
 def create_apps(request):
