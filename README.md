@@ -134,9 +134,9 @@ Aba *dag_models*
 |title|AssinaturaVirtuais|Padrao camelCase SEM espaco entre as palavras.|
 |verbose_name|Assinatura Virtual|Tabela no singular, COM espaco em branco entre as palavras.|
 |verbose_name_plural|Assinaturas Virtuais|Descricao da table em CamelCase com espacos e no plural.	
-|django_modeladmin|FALSE|Diz se essa tabela sera vista so no admin, nao ficara disponivel para o usuario administrar, tabela auxiliar|
-|django_inline_models|Colaboradores, Cidades|Nome das tabelas filhas, tera que ser igual ao "title" ja existentes, separado por virgula.|
-|django_inline_type|TabularInline ou StackedInline|Formato inline do django admin, StackedInline exibe o model de forma do tipo form, TabularInline em forma de linha/lista.|
+|is_model_admin|FALSE|Diz se essa tabela sera vista so no admin, nao ficara disponivel para o usuario administrar, tabela auxiliar|
+|is_read_only|FALSE|Diz se essa tabela sera somente leitura|
+|django_inline_models|ColaboradoreslTabularInline CidadeslStackedInline|Nome das tabelas filhas, tera que ser igual ao "title" ja existentes, separado por linha, TabularInline ou StackedInline, Formato inline do django admin, StackedInline exibe o model de forma do tipo form, TabularInline em forma de linha/lista. |
 |app_slug|sistema_incricao_cadastro|Texto semelhante ao cadastrado na aba dag_apps (slug). tem que existir na listagem.|
 |is_empty|FALSE|Uso nao obrigatorio (padrao False) , Campo utilizado pelo implantador para verifcar quais tabelas estao vazias para remover ou nao.|
 |quant|Automatico|Contabiliza quantos campos/fields estao associados a essa tabela atraves da aba dag_fields relacionando com campo "model_fields".|
