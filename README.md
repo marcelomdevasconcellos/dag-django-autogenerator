@@ -153,18 +153,18 @@ Aba *dag_fields*
 |max_length|20|Tamanho do campo|
 |bootstrap_columns|4|Posicao das colunas no formulario, padrao bootstrap das colunas (2,3,4,6,12)|
 |default_value|Cadastro|Valor padrao preenchido no forumlario. Usuario pode alterar caso queira.|
-|is_null|TRUE|Valor Boolean, se pode ser nulo.|
-|is_blank|TRUE|Valor Boolean, se pode ser branco/vazio.|
+|is_null|TRUE|Valor Boolean, se pode ser nulo. para efeito de banco de dados|
+|is_blank|TRUE|Valor Boolean, se pode ser branco/vazio. para efeito de formulario|
 |is_unique|FALSE|Valor Boolean, se pode ser campo unico.|
-|is_readonly|FALSE|Valor Boolean, se pode ser somente leitura.|
-|is_editable|TRUE|Valor Boolean, se pode ser editavel.|
-|is_db_index|FALSE|Valor Boolean, se pode ser indice da tabela.|
-|is_ordering|FALSE|Valor Boolean, se pode ser ordenavel.|
-|is_model_title|TRUE|Aparece como título do modelo. Na função _str_|
+|is_readonly|FALSE|Valor Boolean, se pode ser somente leitura na exibição do form. Por exemplo ja vem por padrao os campos de auditoria|
+|is_editable|TRUE|Valor Boolean, se pode ser editavel na listagem geral.|
+|is_db_index|FALSE|Valor Boolean, se pode ser indice da tabela. Para efeito de BD facilita nas buscas pois poui indice|
+|is_ordering|FALSE|Valor Boolean, se pode ser ordenavel na listagem e/ou combobox/tag select hmtl.|
+|is_model_title|TRUE|Aparece como título do modelo, pelo menos um campo tera que ser True. Na função _str_|
 |in_search_fields|TRUE|Valor Boolean, se pode ser utilizado na busca/filtro de busca de preenchimento.|
 |in_list_filter|TRUE|Valor Boolean, se pode ser utilizado para filtro.|
 |in_list_display|TRUE|Valor Boolean, se pode ser visivel na listagem principal.|
-|in_field_model|FALSE|Valor Boolean, se pode ser ????.|
+|in_field_model|FALSE|Valor Boolean, se pode ser ???? - sera removido em breve.|
 |choices|1lCadastrado 2lAprovado|Listagem especifica (combobox) select, cada item numa linha diferente|
 |fieldtype_title|CharField ou BooleanField|Tipo de campo no Python(varios tipos)|
 |foreignkey_model_title|Documentos|Vinculado com campo "title" da dag_models, Chave Primaria com outra tabela.|
