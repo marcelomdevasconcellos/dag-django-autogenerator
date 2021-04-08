@@ -13,7 +13,7 @@ pylama = "*"
 [packages]
 pytz = "==2019.1"
 wheel = "==0.34.2"
-Django = "==2.2.19"
+Django = "==2.2.20"
 django-currentuser = "==0.4.2"
 django-constance = "==2.4.0"
 django-environ = "==0.4.5"
