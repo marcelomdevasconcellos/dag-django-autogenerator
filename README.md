@@ -111,6 +111,12 @@ SELECT DISTINCT
 - Incluir parâmetro do caminho e nome do arquivo em import_ods;
 - Transformar em um extensão do python/django;
 
+### Requisitos de Sistema
+
+- Python (versão 3.8.5);
+- Django (versão 3.2);
+- Postgres 12;
+- outros requisitos no arquivo requirements.txt
 
 ### Obrigado!
 
