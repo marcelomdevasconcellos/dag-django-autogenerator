@@ -41,8 +41,8 @@ from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline, Auditoria
 
 {% if models %}from .models import ({% for m in models %}
     {{m.title}},{% endfor %}
-){% endif %}{% for m in models %}
-{{m.rendered_admin}}{% endfor %}"""
+){% endif %}{% for m in models %}{% if m.is_model_admin %}
+{{m.rendered_admin}}{% endif %}{% endfor %}"""
 
 
 MODEL_CLASS = """
@@ -191,12 +191,16 @@ FIELD_BOOLEANFIELD = """{{f.slug_unicode}} = models.BooleanField(
 
 
 FIELD_NULLBOOLEANFIELD = """{{f.slug_unicode}} = models.NullBooleanField(
-        '{{f.verbose_name}}', {% if f.help_text %}
-        help_text='{{f.help_text}}', {% endif %}{% if f.is_blank %}
-        blank=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
+        '{{f.verbose_name}}', {% if f.help_text %}help_text='{{f.help_text}}', {% endif %}
+        {% if f.is_blank %}blank=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
         default={% if f.default_value %}{{f.default_value}}{% endif %}, {% endif %})"""
 
+FIELD_DATETIMEFIELD = """{{f.slug_unicode}} = models.DateTimeField(
+        '{{f.verbose_name}}', {% if f.help_text %}help_text='{{f.help_text}}', {% endif %}
+        {% if f.is_blank %}blank=True, {% endif %}{% if f.is_null %}null=True, {% endif %}
+        {% if f.default_value or f.default_value == 0 %}default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})
 
+"""
 FIELD_TYPES = {
     'IntegerField': FIELD_INTEGERFIELD,
     'CharField': FIELD_CHARFIELD,
@@ -206,4 +210,6 @@ FIELD_TYPES = {
     'TextField': FIELD_TEXTFIELD,
     'BooleanField': FIELD_BOOLEANFIELD,
     'NullBooleanField': FIELD_NULLBOOLEANFIELD,
+    'DateTimeField': FIELD_DATETIMEFIELD,
+    'Data e Hora': FIELD_DATETIMEFIELD,
 }

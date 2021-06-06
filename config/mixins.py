@@ -7,7 +7,7 @@ from django.forms import Select, Textarea
 
 from django_currentuser.middleware import get_current_user
 from reversion.admin import VersionAdmin
-
+from config.helpers.admin import LIST_PER_PAGE, LIST_MAX_SHOW_ALL
 
 class MultiFieldSortableChangeList(ChangeList):
     def get_ordering(self, request, queryset):
@@ -78,6 +78,8 @@ class BaseModel(models.Model):
 
 
 class AuditoriaAdmin(VersionAdmin):
+    list_per_page = LIST_PER_PAGE
+    list_max_show_all = LIST_MAX_SHOW_ALL    
     readonly_fields = (
         'created_at',
         'created_by',
@@ -86,7 +88,10 @@ class AuditoriaAdmin(VersionAdmin):
     )
 
 
+
 class AuditoriaAdminTabularInline(admin.TabularInline):
+    list_per_page = LIST_PER_PAGE
+    list_max_show_all = LIST_MAX_SHOW_ALL
     readonly_fields = (
         'created_at',
         'created_by',
@@ -109,6 +114,8 @@ class AuditoriaAdminTabularInline(admin.TabularInline):
 
 
 class AuditoriaAdminStackedInline(admin.StackedInline):
+    list_per_page = LIST_PER_PAGE
+    list_max_show_all = LIST_MAX_SHOW_ALL
     readonly_fields = (
         'created_at',
         'created_by',
