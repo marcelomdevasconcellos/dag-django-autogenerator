@@ -6,8 +6,8 @@ django-environ==0.4.5
 django-localflavor==3.1
 django-timezone-field==3.0
 django-wkhtmltopdf==3.2.0
-djangorestframework==3.12.4
-django_debug_toolbar==3.2
+djangorestframework==3.11.2
+django_debug_toolbar==3.2.1
 goslate==1.5.1
 psycopg2-binary==2.8.3
 django-reversion==3.0.9
