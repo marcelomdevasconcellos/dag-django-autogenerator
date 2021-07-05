@@ -112,6 +112,13 @@ SELECT DISTINCT
 - Salvar um arquivo com saidas das sugestões de correção;
 - Transformar em um extensão do python/django;
 
+### Requisitos de Sistema
+
+- Python (versão 3.8.5);
+- Django (versão 3.2);
+- Postgres 12;
+- outros requisitos no arquivo requirements.txt
+
 ### Dica do arquivo DAG_PLAN.ods ###
 
 Uma breve explicação sobre o preenchimento da planilha "dag_plan.ods".
