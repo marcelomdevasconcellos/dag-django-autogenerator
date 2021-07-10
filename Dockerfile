@@ -10,21 +10,14 @@ RUN apt-get update \
 
 WORKDIR /usr/src/app
 COPY requirements.txt .
+RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
-#RUN apt-get install -y language-pack-pt_BR
-#ENV LC_ALL pt_BR.UTF-8
-#ENV LANG pt_BR.UTF-8
-#ENV LANGUAGE pt_BR.UTF-8
-
-#RUN export LANGUAGE=pt_BR.UTF-8
-#RUN export LC_ALL=pt_BR.UTF-8
-#RUN export LANG=pt_BR.UTF-8
-#RUN export LC_TYPE=pt_BR.UTF-8
-#RUN locale-gen
-#RUN dpkg-reconfigure locales
 
 COPY . .
 COPY config/.env_docker ./config/.env
+RUN rm config/settings.py
+COPY config/settings_docker.py ./config/settings.py
+
 
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
