@@ -3,10 +3,10 @@ from django import template
 import decimal
 import locale
 
-try:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-except:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+#try:
+    #locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+#except:
+    #locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
 register = template.Library()
 
