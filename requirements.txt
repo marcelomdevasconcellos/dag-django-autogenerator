@@ -1,5 +1,5 @@
 wheel==0.34.2
-Django==3.2.4
+Django==3.2
 django-currentuser==0.5.3
 django-constance==2.8.0
 django-environ==0.4.5
@@ -9,7 +9,7 @@ django-wkhtmltopdf==3.2.0
 djangorestframework==3.11.2
 django_debug_toolbar==3.2.1
 goslate==1.5.1
-psycopg2-binary==2.8.3
+# psycopg2-binary==2.8.3
 django-reversion==3.0.9
 django-automated-logging==6.1.0
 django-log-viewer==1.1.2
