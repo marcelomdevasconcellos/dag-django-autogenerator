@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'ajax_select',  # https://dev.to/thearjun/implement-autocomplete-in-django-3h20
     'reversion',
     'rangefilter', # https://pypi.org/project/django-admin-rangefilter/
+    'django_extensions',
     'dag.apps.DagConfig',
 ] + INSTALLED_APPS_LOCAL
 
