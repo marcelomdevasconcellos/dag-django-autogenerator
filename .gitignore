@@ -137,3 +137,5 @@ teste/
 clientes/
 contrib/
 .~lock*
+data/
+.history

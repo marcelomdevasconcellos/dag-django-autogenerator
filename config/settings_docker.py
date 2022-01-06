@@ -34,6 +34,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
     'localhost',
+    '127.0.0.1',
     env('ALLOWED_HOSTS'),
 ]
 
@@ -53,11 +54,8 @@ INSTALLED_APPS = [
     'ajax_select',  # https://dev.to/thearjun/implement-autocomplete-in-django-3h20
     'reversion',
     'rangefilter', # https://pypi.org/project/django-admin-rangefilter/
-    'django_extensions',
     'dag.apps.DagConfig',
 ] + INSTALLED_APPS_LOCAL
-
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,11 +93,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+#DATABASES = {
     # read os.environ['DATABASE_URL'] and raises ImproperlyConfigured exception if not found
-    'default': env.db(),
-}
+    #'default': env.db(),
+#}
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
