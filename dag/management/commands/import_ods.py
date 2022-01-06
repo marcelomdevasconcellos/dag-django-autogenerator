@@ -149,6 +149,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         file_argument = options["file"] or "dag_plan.ods"
-        print(f'DAG File loading: {file_argument}')
-        print(f"Run 'python manage.py create_apps' for create apps in your project.")
+        print(colored(f'Ok','green')+f' - DAG File loading: {file_argument}')
+        print(f'Run '+colored(f'python manage.py create_apps', 'yellow')+f' for create apps in your project.')
         import_ods(file_argument)

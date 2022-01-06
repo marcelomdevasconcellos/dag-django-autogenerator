@@ -1,31 +1,32 @@
-wheel==0.34.2
+wheel==0.37.0
 Django==3.2
 django-currentuser==0.5.3
 django-constance==2.8.0
-django-environ==0.4.5
+django-environ
 django-localflavor==3.1
-django-timezone-field==3.0
-django-wkhtmltopdf==3.2.0
-djangorestframework==3.11.2
-django_debug_toolbar==3.2.1
-goslate==1.5.1
-# psycopg2-binary==2.8.3
-django-reversion==3.0.9
-django-automated-logging==6.1.0
-django-log-viewer==1.1.2
+#django-localflavor-br==1.0
+django-timezone-field==4.2.1
+django-wkhtmltopdf==3.3.0
+djangorestframework==3.12.4
+django_debug_toolbar==3.2.2
+goslate==1.5.2
+psycopg2-binary
+django-reversion==4.0.1
+django-automated-logging==6.1.3
+django-log-viewer==1.1.4
 git+git://github.com/marcelomdevasconcellos/django-adminlte-ui.git#egg=django-adminlte-ui #original: django-adminlte-ui==1.5.1
-django-filter==2.2.0
+django-filter==21.1
 django-picklefield
-django-jsonfield==1.4.0
-unidecode==1.1.1
-django_extensions==3.0.3
+django-jsonfield==1.4.1
+unidecode==1.3.2
+django_extensions==3.1.5
 pydotplus==2.0.2
-graphviz==0.14.1
+graphviz==0.19
 pandas
 xlrd==2.0.1
-openpyxl==3.0.6
+openpyxl==3.0.9
 termcolor==1.1.0
 django-ajax-selects==2.1.0 #https://dev.to/thearjun/implement-autocomplete-in-django-3h20
-django-admin-rangefilter==0.7.0 # https://github.com/silentsokolov/django-admin-rangefilter
+django-admin-rangefilter==0.8.2 # https://github.com/silentsokolov/django-admin-rangefilter
 pyexcel-ods3==0.6.0
-requests==2.25.1
+requests==2.26.0

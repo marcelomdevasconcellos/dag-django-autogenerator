@@ -101,8 +101,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models sem nenhum campo inserido...")
-        print(colored(
-            "Existem %s Models sem nenhum campo inserido, corrija-os na planilha." % len(models), "red"))
+        print(colored("Existem %s Models sem nenhum campo inserido, corrija-os na planilha." % len(models), "red"))
         for a in models:
             print('- %s' % a.title)
 #    else:
@@ -118,7 +117,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models não referenciados por ForeignKey...")
-        print("Existem %s Models não referenciados por ForeignKey, CASO NECESSÁRIO, corrija-os na planilha." % len(models))
+        print(colored("Existem %s Models não referenciados por ForeignKey, CASO NECESSÁRIO, corrija-os na planilha." % len(models), "red"))
         for a in models:
             print('- %s' % a.title)
 #    else:
@@ -135,7 +134,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models sem nenhum campo 'in_search_fields' preenchido...")
-        print("Existem %s Models sem nenhum campo 'in_search_fields' preenchido, corrija-os na planilha." % len(models))
+        print(colored("Existem %s Models sem nenhum campo 'in_search_fields' preenchido, corrija-os na planilha." % len(models),'red'))
         for a in models:
             print('- %s' % a.title)
 #    else:
@@ -152,7 +151,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models sem nenhum campo 'in_list_filter' preenchido...")
-        print("Existem %s Models sem nenhum campo 'in_list_filter' preenchido, corrija-os na planilha." % len(models))
+        print(colored("Existem %s Models sem nenhum campo 'in_list_filter' preenchido, corrija-os na planilha." % len(models),'red'))
         for a in models:
             print('- %s' % a.title)
 #    else:
@@ -169,7 +168,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models sem nenhum campo 'in_list_display' preenchido...")
-        print("Existem %s Models sem nenhum campo 'in_list_display' preenchido, corrija-os na planilha." % len(models))
+        print(colored("Existem %s Models sem nenhum campo 'in_list_display' preenchido, corrija-os na planilha." % len(models),'red'))
         for a in models:
             print('- %s' % a.title)
 #    else:
@@ -186,7 +185,7 @@ def check_database():
         'title').exclude(title__in=return_list).all()
     if models:
         print("Verificando a existência Models sem nenhum campo 'is_ordering' preenchido...")
-        print("Existem %s Models sem nenhum campo 'is_ordering' preenchido, corrija-os na planilha." % len(models))
+        print(colored("Existem %s Models sem nenhum campo 'is_ordering' preenchido, corrija-os na planilha." % len(models),'red'))
         for a in models:
             print('- %s' % a.title)
 #    else:
