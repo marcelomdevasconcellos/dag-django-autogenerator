@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from dag.models import Apps, Models, Fields, FieldTypes, ModelsInline
-from dag.views import FIELD_TYPES
+from dag.models import Apps, Models, Fields, ModelsInline
+from dag.variables import FIELD_TYPES
 from termcolor import colored
 from django.db import IntegrityError
 

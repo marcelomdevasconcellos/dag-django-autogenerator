@@ -1,9 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
-import time
-from dag.views import create_apps_function
-from dag.management.commands.import_ods import import_ods
-from dag.models import Apps, Models, Fields, FieldTypes
+from django.core.management.base import BaseCommand
 from termcolor import colored
+
+from dag.models import Apps, Models, Fields
 
 
 def verify_special_chars(lista, campo):

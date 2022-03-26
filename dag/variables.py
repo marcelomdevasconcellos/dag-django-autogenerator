@@ -50,13 +50,11 @@ MODEL_CLASS = """
 
 
 class {{m.title}}(BaseModel):
-
     cols = {{% for f in fields %}
-        '{{f.slug}}': {{f.bootstrap_columns}},{% endfor %}}
+        '{{f.slug}}': {{f.bootstrap_columns}}, {% endfor %}}
     
     {% for f in fields %}{{f.rendered_model_django}}
     {% endfor %}
-
     def __str__(self):
         return {{m.model_str}}
 
