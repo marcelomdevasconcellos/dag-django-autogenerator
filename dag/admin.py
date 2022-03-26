@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.forms import Select, Textarea
 
-from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, Fields, ModelFunctions, CustomModels, Variables
 from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline
+from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, Fields, ModelFunctions, CustomModels, Variables
 
 
 def render_fields(modeladmin, request, queryset):
@@ -19,20 +18,6 @@ def render_fields(modeladmin, request, queryset):
         Fields.objects.\
             filter(id=obj.id).\
             update(rendered_model_django=rendered_model_django)
-
-    # def create_models(request, model_id):
-    #
-    #     from django.template import Template, Context
-    #     context = {
-    #         'f': obj,
-    #     }
-    #     template = '{% load templatetags %}{% autoescape off %}' + m.grupos.admin_code + '{% endautoescape %}'
-    #     t = Template(template)
-    #     context = Context(context)
-    #     rendered_model = t.render(context)
-    #     rendered_admin = rendered_admin.replace('<@', '{%').replace('@>', '%}')
-    #     rendered_admin = rendered_admin.replace('<<', '{{').replace('>>', '}}')
-    #     EmensageriaModelos.objects.filter(id=m.id).update(rendered_admin=rendered_admin)
 
 
 render_fields.short_description = "Render fields"

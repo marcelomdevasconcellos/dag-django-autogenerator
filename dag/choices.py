@@ -4,6 +4,11 @@ FIELDTYPES = (
     ('TextField', 'TextField'),
     ('DateField', 'DateField'),
     ('BooleanField', 'BooleanField'),
+    ('DecimalField', 'DecimalField'),
+    ('ForeignKey', 'ForeignKey'),
+    ('TextField', 'TextField'),
+    ('NullBooleanField', 'NullBooleanField'),
+    ('DateTimeField', 'DateTimeField'),
 )
 
 
