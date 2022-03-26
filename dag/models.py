@@ -132,13 +132,6 @@ class Fields(BaseModel):
         blank=True,
         null=True,
     )
-    fieldtype = models.ForeignKey(
-        'FieldTypes',
-        on_delete=models.SET_NULL,
-        related_name='%(class)s_fieldtype',
-        blank=True,
-        null=True,
-    )
     slug = models.CharField(max_length=50, )
     help_text = models.TextField(null=True, blank=True)
     verbose_name = models.CharField(max_length=500, null=True, blank=True)
@@ -210,20 +203,6 @@ class Fields(BaseModel):
         verbose_name_plural = _('Fields')
         ordering = ['model', 'order']
         unique_together = ['model', 'slug']
-
-
-class FieldTypes(BaseModel):
-
-    title = models.CharField(max_length=100, unique=True)
-    model_code = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _('Field Type')
-        verbose_name_plural = _('Field Types')
-        ordering = ['title']
 
 
 class CustomModels(BaseModel):

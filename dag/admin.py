@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import Select, Textarea
 
-from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, FieldTypes, Fields, ModelFunctions, CustomModels, Variables
+from dag.models import BusinessRulesCode, BusinessRules, Models, Apps, Fields, ModelFunctions, CustomModels, Variables
 from config.mixins import AuditoriaAdmin, AuditoriaAdminTabularInline
 
 
@@ -46,16 +46,6 @@ def update_foreignkey(modeladmin, request, queryset):
 
 
 update_foreignkey.short_description = "Update foreignkeys"
-
-
-def update_field_types(modeladmin, request, queryset):
-    for obj in queryset:
-        type = FieldTypes.objects.filter(title=obj.field_type_txt).all()
-        if type:
-            Fields.objects.filter(id=obj.id).update(type=type[0])
-
-
-update_field_types.short_description = "Update field types"
 
 
 def verify_empty_tables(modeladmin, request, queryset):
@@ -130,7 +120,6 @@ class ModelsInline(AuditoriaAdminTabularInline):
 class FieldsAdmin(AuditoriaAdmin):
     actions = [
         render_fields,
-        update_field_types,
         update_foreignkey,
     ]
     search_fields = (
@@ -140,7 +129,6 @@ class FieldsAdmin(AuditoriaAdmin):
     )
     list_filter = (
         'field_type_txt',
-        'fieldtype',
         'foreignkey_txt',
         'foreignkey',
         'model',
@@ -162,7 +150,6 @@ class FieldsAdmin(AuditoriaAdmin):
         'slug',
         'verbose_name',
         'field_type_txt',
-        'fieldtype',
         'foreignkey',
         'max_length',
         'default_value',
@@ -235,19 +222,6 @@ class AppsAdmin(AuditoriaAdmin):
     inlines = [
         ModelsInline,
     ]
-
-
-@admin.register(FieldTypes)
-class FieldTypesAdmin(AuditoriaAdmin):
-    search_fields = (
-        'title',
-        'model_code',
-    )
-    list_filter = ()
-    list_display = (
-        'title',
-        'model_code',
-    )
 
 
 @admin.register(CustomModels)

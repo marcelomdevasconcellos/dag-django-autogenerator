@@ -1,6 +1,6 @@
-import time
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from dag.models import Apps, Models, Fields, FieldTypes, ModelsInline
+from dag.views import FIELD_TYPES
 from termcolor import colored
 from django.db import IntegrityError
 
@@ -43,17 +43,6 @@ def import_models(data_list):
             obj.save()
 
 
-def import_fieldtypes(data_list):
-    fields = ['id', 'title', 'model_code']
-    for d in data_list:
-        if len(d):
-            dic = {}
-            for f in range(len(fields)):
-                dic[fields[f]] = d[f]
-            obj = FieldTypes(**dic)
-            obj.save()
-
-
 def import_fields(data_list):
     fields = [
         'id', 'model_title', 'slug', 'verbose_name', 'help_text', 'max_length',
@@ -81,12 +70,10 @@ def import_fields(data_list):
                               (d[0], d[1], dic['model_title']) , 'red'))
                 return None
 
-            try:
-                dic['fieldtype_id'] = FieldTypes.objects.get(title=dic['fieldtype_title']).id
-            except:
-                print(colored('[dag_models - Linha %s] Erro ao tentar localizar um FieldType com o "fieldtype" igual a %s' %
-                              (d[0], dic['fieldtype_title']), 'red'))
-                return None
+            if dic['fieldtype_title'] not in FIELD_TYPES:
+                print(colored('[dag_models - Linha %s] Erro ao tentar localizar um FieldType '
+                              'com o "fieldtype" igual a %s' % (d[0], dic['fieldtype_title']), 'red'))
+                break
 
             if 'foreignkey_model_title' in dic:
 
@@ -119,14 +106,13 @@ def update_inline_models():
             except:
                 print(colored('[dag_models inline] Erro ao tentar localizar um Model com o "title" igual a %s' % i[0], 'red'))
                 return None
-            dic = {'model':m, 'model_inline': mi, 'type_inline': i[1]}
+            dic = {'model': m, 'model_inline': mi, 'type_inline': i[1]}
             obj = ModelsInline(**dic)
             obj.save()
 
 
 def import_ods(plan_file):
     from pyexcel_ods3 import get_data
-    import json
 
     Fields.objects.all().delete()
     ModelsInline.objects.all().delete()
@@ -135,7 +121,6 @@ def import_ods(plan_file):
 
     data = get_data(plan_file)
     import_apps(data['dag_apps'][1:])
-    import_fieldtypes(data['dag_fieldtypes'][1:])
     import_models(data['dag_models'][1:])
     import_fields(data['dag_fields'][1:])
     update_inline_models()
@@ -149,6 +134,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         file_argument = options["file"] or "dag_plan.ods"
-        print(colored(f'Ok','green')+f' - DAG File loading: {file_argument}')
-        print(f'Run '+colored(f'python manage.py create_apps', 'yellow')+f' for create apps in your project.')
+        print(colored(f'Ok', 'green') + f' - DAG File loading: {file_argument}')
+        print(f'Run ' + colored(f'python manage.py create_apps', 'yellow') + f' for create apps in your project.')
         import_ods(file_argument)

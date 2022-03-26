@@ -5,6 +5,7 @@ class %sConfig(AppConfig):
     name = '%s'
 """
 
+
 INSTALLED_APPS = """INSTALLED_APPS = [{% for a in apps %}
     '{{a.slug}}.apps.{{a.title_unicode}}Config',{% endfor %}
 ]
@@ -189,18 +190,18 @@ FIELD_BOOLEANFIELD = """{{f.slug_unicode}} = models.BooleanField(
         default={% if f.default_value %}{{f.default_value}}{% endif %}, {% endif %})"""
 
 
-
 FIELD_NULLBOOLEANFIELD = """{{f.slug_unicode}} = models.NullBooleanField(
         '{{f.verbose_name}}', {% if f.help_text %}help_text='{{f.help_text}}', {% endif %}
         {% if f.is_blank %}blank=True, {% endif %}{% if f.default_value or f.default_value == 0 %}
         default={% if f.default_value %}{{f.default_value}}{% endif %}, {% endif %})"""
 
+
 FIELD_DATETIMEFIELD = """{{f.slug_unicode}} = models.DateTimeField(
         '{{f.verbose_name}}', {% if f.help_text %}help_text='{{f.help_text}}', {% endif %}
         {% if f.is_blank %}blank=True, {% endif %}{% if f.is_null %}null=True, {% endif %}
-        {% if f.default_value or f.default_value == 0 %}default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})
+        {% if f.default_value or f.default_value == 0 %}default={% if f.default_value|is_int %}{{f.default_value}}{% else %}'{{f.default_value}}'{% endif %}, {% endif %})"""
 
-"""
+
 FIELD_TYPES = {
     'IntegerField': FIELD_INTEGERFIELD,
     'CharField': FIELD_CHARFIELD,
@@ -211,5 +212,4 @@ FIELD_TYPES = {
     'BooleanField': FIELD_BOOLEANFIELD,
     'NullBooleanField': FIELD_NULLBOOLEANFIELD,
     'DateTimeField': FIELD_DATETIMEFIELD,
-    'Data e Hora': FIELD_DATETIMEFIELD,
 }

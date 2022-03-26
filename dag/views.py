@@ -1,24 +1,17 @@
 import os
-from django.shortcuts import render
+
 from django.http import HttpResponse
+from termcolor import colored
+
+from dag.functions import render_fields_obj, render_models_admins_obj, save_file
 from dag.variables import (
     APP_CONTENT,
     INSTALLED_APPS,
     MODEL_CONTENT,
     ADMIN_CONTENT,
     CHOICES_CONTENT,
-    MODEL_CLASS,
-    ADMIN_CLASS,
-    FIELD_CHARFIELD,
-    FIELD_TEXTFIELD,
-    FIELD_DECIMALFIELD,
-    FIELD_INTEGERFIELD,
-    FIELD_DATEFIELD,
-    FIELD_FOREIGNKEY,
-    FIELD_TYPES,)
-from dag.models import Apps, Models, Fields, FieldTypes
-from dag.functions import render_fields_obj, render_models_admins_obj, save_file, read_file
-from termcolor import colored
+)
+
 
 # Create your views here.
 # python manage.py graph_models -a -o filename.png
