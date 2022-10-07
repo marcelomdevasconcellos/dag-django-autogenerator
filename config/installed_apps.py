@@ -1,4 +1,1 @@
-INSTALLED_APPS = [
-    'clientes.apps.ClientesConfig',
-    'contrib.apps.ContribConfig',
-]
+INSTALLED_APPS = []
