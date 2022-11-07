@@ -4,17 +4,17 @@ django-currentuser==0.5.3
 django-constance==2.8.0
 django-environ
 django-localflavor==3.1
-#django-localflavor-br==1.0
+# django-localflavor-br==1.0
 django-timezone-field==4.2.1
 django-wkhtmltopdf==3.3.0
 djangorestframework==3.12.4
 django_debug_toolbar==3.2.2
-goslate==1.5.2
+#goslate==1.5.2
 psycopg2-binary
 django-reversion==4.0.1
 django-automated-logging==6.1.3
 django-log-viewer==1.1.4
-git+git://github.com/marcelomdevasconcellos/django-adminlte-ui.git#egg=django-adminlte-ui #original: django-adminlte-ui==1.5.1
+git+https://github.com/marcelomdevasconcellos/django-adminlte-ui.git#egg=django-adminlte-ui #original: django-adminlte-ui==1.5.1
 django-filter==21.1
 django-picklefield
 django-jsonfield==1.4.1
